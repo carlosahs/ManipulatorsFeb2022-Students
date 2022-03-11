@@ -55,7 +55,7 @@ class Planner():
     print("Available Planning Groups:", robot.get_group_names())
 
     # Sometimes for debugging it is useful to print the entire state of the robot
-    print("🦾 Printing robot state")
+    print("Printing robot state")
     print(robot.get_current_state())
     print("")
 
