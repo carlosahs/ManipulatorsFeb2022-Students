@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-	<node pkg="basic_comms" name="talker" type="talker.py" args=""/>
-	<node pkg="basic_comms" name="listener" type="listener.py" args=""/>
-</launch>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$/gazebo_link_attacher_ws/src/gazebo_ros_link_attacher" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test_arm/src/xarm_ros/gazebo_ros_link_attacher" vcs="Git" />
-  </component>
-</project>
