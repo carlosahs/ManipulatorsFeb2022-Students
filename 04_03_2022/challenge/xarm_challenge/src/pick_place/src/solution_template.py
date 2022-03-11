@@ -41,12 +41,12 @@ class Planner():
 
   def detachBox(self,box_name):
 
-  #TODO: Open the gripper and call the service that releases the box
+    #TODO: Open the gripper and call the service that releases the box
 
 
   def attachBox(self,box_name):
 
-  #TODO: Close the gripper and call the service that releases the box
+    #TODO: Close the gripper and call the service that releases the box
 
 
 
@@ -61,11 +61,15 @@ class myNode():
   def getGoal(self,action):
 
     #TODO: Call the service that will provide you with a suitable target for the movement
+    # /RequestGoal service
+    # /TaskPlanner/tf2_frames
 
 
   def tf_goal(self, goal):
 
     #TODO:Use tf2 to retrieve the position of the target with respect to the proper reference frame
+    # /TaskPlanner/tf2_frames
+    # /get_planner_params
 
 
   def main(self):
