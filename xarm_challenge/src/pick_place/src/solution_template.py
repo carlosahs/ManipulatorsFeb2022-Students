@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-# Python 2/3 compatibility imports
+#!/usr/bin/env python
+
 import rospy
 import sys
 import tf_conversions
