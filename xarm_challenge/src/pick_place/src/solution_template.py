@@ -125,21 +125,22 @@ class Planner():
     Rbox_pose = geometry_msgs.msg.PoseStamped()
     Bbox_pose = geometry_msgs.msg.PoseStamped()
     Gbox_pose = geometry_msgs.msg.PoseStamped()
-    Rbox_pose.header.frame_id = targets[0]
-    Bbox_pose.header.frame_id = targets[1]
-    Gbox_pose.header.frame_id = targets[2]
+    Rbox_pose.header.frame_id = "%s" % (targets[0], '1')
+    Bbox_pose.header.frame_id = "%s" % (targets[1], '1')
+    Gbox_pose.header.frame_id = "%s" % (targets[2], '1')
     # RED
     Rbox_pose.pose.orientation.w = 1.0
     Rbox_pose.pose.position.z = 0
-    Rbox_name = "RedBox"
+    Rbox_name = "%s" % (targets[0], '1')
     # BLUE
     Bbox_pose.pose.orientation.w = 2.0
     Bbox_pose.pose.position.z = 0
-    Bbox_name = "BlueBox"
+    Bbox_name = "%s" % (targets[1], '1')
     # GREEN
     Gbox_pose.pose.orientation.w = 3.0
     Gbox_pose.pose.position.z = 0
-    Gbox_name = "GreenBox"
+    Gbox_name = "%s" % (targets[2], '1')
+
     scene.add_box(Rbox_name, Rbox_pose, size=(0.06, 0.06, 0.06))
     scene.add_box(Bbox_name, Bbox_pose, size=(0.06, 0.06, 0.06))
     scene.add_box(Gbox_name, Gbox_pose, size=(0.06, 0.06, 0.06))
