@@ -29,6 +29,13 @@ class Planner():
     group_name = "xarm6"
     self.move_group = moveit_commander.MoveGroupCommander(group_name)
 
+    # Create DisplayTrajectory ROS publisher
+    self.display_trajectory_publisher = rospy.Publisher(
+        "/move_group/display_trajectory_publisher",
+        moveit_msgs.msg.DisplayTrajectory,
+        queue_size=20
+    )
+
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
 
@@ -50,9 +57,9 @@ class Planner():
     Bbox_pose = geometry_msgs.msg.PoseStamped()
     Gbox_pose = geometry_msgs.msg.PoseStamped()
 
-    Rbox_pose.header.frame_id = "%s" % (targets[0], '1')
-    Bbox_pose.header.frame_id = "%s" % (targets[1], '1')
-    Gbox_pose.header.frame_id = "%s" % (targets[2], '1')
+    Rbox_pose.header.frame_id = "%s1" % targets[0]
+    Bbox_pose.header.frame_id = "%s1" % targets[1]
+    Gbox_pose.header.frame_id = "%s1" % targets[2]
 
     # RED
     Rbox_pose.pose.orientation.w = 1.0
