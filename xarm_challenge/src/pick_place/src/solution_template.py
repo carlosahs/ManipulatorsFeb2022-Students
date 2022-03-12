@@ -30,7 +30,7 @@ class Planner():
     self.move_group = moveit_commander.MoveGroupCommander(group_name)
 
     # Create DisplayTrajectory ROS publisher
-    self.display_trajectory_publisher = rospy.Publisher(
+    display_trajectory_publisher = rospy.Publisher(
         "/move_group/display_trajectory_publisher",
         moveit_msgs.msg.DisplayTrajectory,
         queue_size=20
