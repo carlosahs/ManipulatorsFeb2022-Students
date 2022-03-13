@@ -203,12 +203,24 @@ class myNode():
     gbox.position.y = 0.187592
     gbox.position.z = 0.001827
 
-    gbox.orientation.x = 0.999998
-    gbox.orientation.y = -0
-    gbox.orientation.z = -0.00190996
-    gbox.orientation.w = -0.000413786
+    current_pos = self.planner.move_group.get_current_state("link_eef")
+
+    gbox.orientation = current_pos.pose.orientation
 
     self.planner.goToPose(gbox)
+
+    # Get green box deposit position
+    deposit_gbox = geometry_msgs.msg.Pose()
+
+    deposit_gbox.position.x = 0.041
+    deposit_gbox.position.y = -0.464
+    deposit_gbox.position.z = 0.049
+
+    current_pos = self.planner.move_group.get_current_state("link_eef")
+
+    deposit_gbox.orientation = current_pos.pose.orientation
+
+    self.planner.goToPose(deposit_gbox)
 
     rospy.signal_shutdown("Task Completed")
 
