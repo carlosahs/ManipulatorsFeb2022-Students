@@ -203,7 +203,7 @@ class myNode():
     gbox.position.y = 0.187592
     gbox.position.z = 0.001827
 
-    current_pos = self.planner.move_group.get_current_state("link_eef")
+    current_pos = self.planner.move_group.get_current_pose("link_eef")
 
     gbox.orientation = current_pos.pose.orientation
 
@@ -216,7 +216,7 @@ class myNode():
     deposit_gbox.position.y = -0.464
     deposit_gbox.position.z = 0.049
 
-    current_pos = self.planner.move_group.get_current_state("link_eef")
+    current_pos = self.planner.move_group.get_current_pose("link_eef")
 
     deposit_gbox.orientation = current_pos.pose.orientation
 
