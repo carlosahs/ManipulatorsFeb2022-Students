@@ -172,11 +172,11 @@ class Planner():
 class myNode():
   def __init__(self):
     #TO DO: Initialise ROS and create the service calls
-    rospy.init_node('solution', anonymous=True)
+    # rospy.init_node('solution', anonymous=True)
 
     # Good practice trick, wait until the required services are online before continuing with the aplication
     rospy.wait_for_service('RequestGoal')
-    rospy
+    rospy.wait_for_service('AttachObject')
 
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
