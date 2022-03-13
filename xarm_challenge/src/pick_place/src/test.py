@@ -24,10 +24,10 @@ class Planner():
     scene = moveit_commander.PlanningSceneInterface()
     
     # Instantiate a MoveGroupCommander objects
-    self.xarm_group = moveit_commander.MoveGroupCommander("xarm6")
-    self.xgripper = moveit_commander.MoveGroupCommander("xarm_gripper")
-    
-
+    xarm_group = moveit_commander.MoveGroupCommander("xarm6")
+    self.xarm_group = xarm_group
+    xgripper = moveit_commander.MoveGroupCommander("xarm_gripper")
+    self.xgripper = xgripper
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
@@ -75,44 +75,24 @@ class Planner():
   
 
     
-  def goToPose(self): # pose_goal
+  def goToPose(self, pose_goal): 
     #TO DO: Code used to move to a given position using move it
-    pose_target = geometry_msgs.msg.Pose()
-    pose_target.position.x = 0.214284
-    pose_target.position.y = 0.187592
-    pose_target.position.z = 0.001827
-    pose_target.orientation.x = 0.999998
-    pose_target.orientation.y = -0
-    pose_target.orientation.z = -0.00190996
-    pose_target.orientation.w = -0.000413786
-
-    xarm_group.set_pose_target(pose_target)
-    xarm_group.go()
-
-    xgripper.set_named_target("close")
-    xgripper.go(wait = True)
-
-    pose_target = geometry_msgs.msg.Pose()
-    pose_target.position.x = 0.22664
-    pose_target.position.y = -0.411781
-    pose_target.position.z = 0.29226
-    pose_target.orientation.x = 0.999766
-    pose_target.orientation.y = 0.02116288
-    pose_target.orientation.z = -0
-    pose_target.orientation.w = 0
-
-    xgripper.set_named_target("open")
-    xgripper.go(wait = True)
+    self.xarm_group.set_pose_target(pose_goal)
+    self.xarm_group.go()
+    self.xarm_group.stop()
+    self.xarm_group.clear_pose_targets()
 
 
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
-    pass
+    self.xgripper.set_named_target("open")
+    self.xgripper.go(wait = True)
 
 
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
-    pass
+    self.xgripper.set_named_target("close")
+    selfxgripper.go(wait = True)
 
 ######################################################################################
 
@@ -128,7 +108,6 @@ class myNode():
 
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
-
     pass
 
 
@@ -142,7 +121,28 @@ class myNode():
     #TO DO: Main code that contains the aplication
     self.planner = Planner()
     self.planner.addObstacles()
-    self.planner.goToPose()
+
+    # Get Box Position
+    box = geometry_msgs.msg.Pose()
+    box.position.x = 0.214284
+    box.position.y = 0.187592
+    box.position.z = 0.001827
+    box.orientation.x = 0.999998
+    box.orientation.y = -0
+    box.orientation.z = -0.00190996
+    box.orientation.w = -0.000413786
+    self.planner.goToPose(box)
+
+    # Get Deposit Position
+    deposit = geometry_msgs.msg.Pose()
+    deposit.position.x = 0.22664
+    deposit.position.y = -0.411781
+    deposit.position.z = 0.29226
+    deposit.orientation.x = 0.999766
+    deposit.orientation.y = 0.02116288
+    deposit.orientation.z = -0
+    deposit.orientation.w = 0
+    self.planner.goToPose(deposit)
 
     rospy.signal_shutdown("Task Completed")
 
