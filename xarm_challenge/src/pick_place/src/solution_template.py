@@ -89,6 +89,8 @@ class Planner():
     Adding Objects to the Planning Scene
     **************************
     """ 
+    scene = self.scene
+
     #Cargo names
     targets = [
         "RedBox",
