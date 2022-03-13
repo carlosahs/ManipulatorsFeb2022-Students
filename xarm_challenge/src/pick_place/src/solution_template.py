@@ -57,9 +57,9 @@ class Planner():
     Bbox_pose = geometry_msgs.msg.PoseStamped()
     Gbox_pose = geometry_msgs.msg.PoseStamped()
 
-    Rbox_pose.header.frame_id = "%s1" % targets[0]
-    Bbox_pose.header.frame_id = "%s1" % targets[1]
-    Gbox_pose.header.frame_id = "%s1" % targets[2]
+    Rbox_pose.header.frame_id = targets[0]
+    Bbox_pose.header.frame_id = targets[1]
+    Gbox_pose.header.frame_id = targets[2]
 
     # RED
     Rbox_pose.pose.orientation.w = 1.0
