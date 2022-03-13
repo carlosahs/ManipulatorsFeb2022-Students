@@ -26,8 +26,7 @@ class Planner():
     scene = moveit_commander.PlanningSceneInterface()
     
     # Instantiate a MoveGroupCommander object
-    group_name = "xarm6"
-    move_group = moveit_commander.MoveGroupCommander(group_name)
+    xarm_group = moveit_commander.MoveGroupCommander("xarm6")
 
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
@@ -37,10 +36,10 @@ class Planner():
     )
 
     # Display basic information
-    planning_frame = move_group.get_planning_frame()
+    planning_frame = xarm_group.get_planning_frame()
     print "====== Planning frame: %s" % planning_frame
 
-    eef_link = move_group.get_end_effector_link()
+    eef_link = xarm_group.get_end_effector_link()
     print "====== End effector link is : %s" % eef_link
 
     group_names = robot.get_group_names()
@@ -53,7 +52,7 @@ class Planner():
     # Instantiate class variables
     self.robot = robot
     self.scene = scene
-    self.move_group = move_group
+    self.xarm_group = xarm_group
     self.display_trajectory_publisher = display_trajectory_publisher
     self.planning_frame = planning_frame
     self.eef_link = eef_link
@@ -147,13 +146,13 @@ class Planner():
 
   def goToPose(self,pose_goal):
     #TO DO: Code used to move to a given position using move it
-    move_group = self.move_group
+    xarm_group = self.xarm_group
 
-    move_group.set_pose_target(pose_goal)
-    plan = move_group.go(wait=True)
+    xarm_group.set_pose_target(pose_goal)
+    plan = xarm_group.go(wait=True)
 
-    move_group.stop()
-    move_group.clear_pose_targets()
+    xarm_group.stop()
+    xarm_group.clear_pose_targets()
 
 
   def detachBox(self,box_name):
@@ -199,28 +198,32 @@ class myNode():
     # Get Box Position
     gbox = geometry_msgs.msg.Pose()
 
-    gbox.position.x = 0.214284
-    gbox.position.y = 0.187592
-    gbox.position.z = 0.001827
+    # gbox.position.x = 0.214284
+    # gbox.position.y = 0.187592
+    # gbox.position.z = 0.001827
 
-    current_pos = self.planner.move_group.get_current_pose("link_eef")
+    gbox.position.x = 0.186
+    gbox.position.y = 0.166
+    gbox.position.z = 0.222
+
+    current_pos = self.planner.xarm_group.get_current_pose("link_tcp")
 
     gbox.orientation = current_pos.pose.orientation
 
     self.planner.goToPose(gbox)
 
     # Get green box deposit position
-    deposit_gbox = geometry_msgs.msg.Pose()
+    # deposit_gbox = geometry_msgs.msg.Pose()
 
-    deposit_gbox.position.x = 0.041
-    deposit_gbox.position.y = -0.464
-    deposit_gbox.position.z = 0.049
+    # deposit_gbox.position.x = 0.041
+    # deposit_gbox.position.y = -0.464
+    # deposit_gbox.position.z = 0.049
 
-    current_pos = self.planner.move_group.get_current_pose("link_eef")
+    # current_pos = self.planner.xarm_group.get_current_pose("link_eef")
 
-    deposit_gbox.orientation = current_pos.pose.orientation
+    # deposit_gbox.orientation = current_pos.pose.orientation
 
-    self.planner.goToPose(deposit_gbox)
+    # self.planner.goToPose(deposit_gbox)
 
     rospy.signal_shutdown("Task Completed")
 
