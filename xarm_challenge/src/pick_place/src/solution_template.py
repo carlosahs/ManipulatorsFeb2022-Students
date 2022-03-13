@@ -20,14 +20,14 @@ class Planner():
     moveit_commander.roscpp_initialize(sys.argv)
 
     # Instantiate a RobotCommander object
-    self.robot = moveit_commander.RobotCommander()
+    robot = moveit_commander.RobotCommander()
 
     # Instantiate a PlanningSceneInterface object
-    self.scene = moveit_commander.PlanningSceneInterface()
+    scene = moveit_commander.PlanningSceneInterface()
     
     # Instantiate a MoveGroupCommander object
     group_name = "xarm6"
-    self.move_group = moveit_commander.MoveGroupCommander(group_name)
+    move_group = moveit_commander.MoveGroupCommander(group_name)
 
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
@@ -35,6 +35,29 @@ class Planner():
         moveit_msgs.msg.DisplayTrajectory,
         queue_size=20
     )
+
+    # Display basic information
+    planning_frame = move_group.get_planning_frame()
+    print "====== Planning frame: %s" % planning_frame
+
+    eef_link = move_group.get_end_effector_link()
+    print "====== End effector link is : %s" % eef_link
+
+    group_names = robot.get_group_names()
+    print "====== Available Planning Groups: %s" % group_names
+
+    print "====== Printing robot state"
+    print robot.get_current_state()
+    print ''
+
+    # Instantiate class variables
+    self.robot = robot
+    self.scene = scene
+    self.move_group = move_group
+    self.self.display_trajectory_publisher = display_trajectory_publisher
+    self.planning_frame = planning_frame
+    self.eef_link = eef_link
+    self.group_names = group_names
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
@@ -76,9 +99,9 @@ class Planner():
     Gbox_pose.pose.position.z = 0
     Gbox_name = targets[2]
 
-    self.scene.add_box(Rbox_name, Rbox_pose, size=(0.06, 0.06, 0.06))
-    self.scene.add_box(Bbox_name, Bbox_pose, size=(0.06, 0.06, 0.06))
-    self.scene.add_box(Gbox_name, Gbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(Rbox_name, Rbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(Bbox_name, Bbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(Gbox_name, Gbox_pose, size=(0.06, 0.06, 0.06))
 
     #goal names
     boxes = ["DepositBoxGreen",
@@ -138,17 +161,17 @@ class myNode():
     self.planner = Planner()
     self.planner.addObstacles()
 
-    # # Plan a motion for this group to a desired pose for the end-effector
-    # pose_goal = geometry_msgs.msg.Pose()
-    # pose_goal.orientation.x = 1.0
-    # pose_goal.orientation.y = 1.0
-    # pose_goal.orientation.z = 1.0
-    # pose_goal.orientation.w = 1.0
-    # pose_goal.position.x = 0.8
-    # pose_goal.position.y = 0.7
-    # pose_goal.position.z = 0.5
+    # Plan a motion for this group to a desired pose for the end-effector
+    pose_goal = geometry_msgs.msg.Pose()
+    pose_goal.orientation.x = 1.0
+    pose_goal.orientation.y = 1.0
+    pose_goal.orientation.z = 1.0
+    pose_goal.orientation.w = 1.0
+    pose_goal.position.x = 0.8
+    pose_goal.position.y = 0.7
+    pose_goal.position.z = 0.5
 
-    # self.planner.goToPose(pose_goal)
+    self.planner.goToPose(pose_goal)
 
     rospy.signal_shutdown("Task Completed")
 
