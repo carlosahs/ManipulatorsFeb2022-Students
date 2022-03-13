@@ -147,14 +147,13 @@ class Planner():
 
   def goToPose(self,pose_goal):
     #TO DO: Code used to move to a given position using move it
-    #TO DO: Code used to move to a given position using move it
-    self.move_group.set_pose_target(pose_goal)
-    # call the planner to compute the plan and execute it
-    plan = self.move_group.go(wait=True)
-    # Calling `stop()` ensures that there is no residual movement
-    self.move_group.stop()
-    # It is always good to clear your targets after planning with poses.
-    self.move_group.clear_pose_targets()
+    move_group = self.move_group
+
+    move_group.set_pose_target(pose_goal)
+    plan = move_group.go(wait=True)
+
+    move_group.stop()
+    move_group.clear_pose_targets()
 
 
   def detachBox(self,box_name):
