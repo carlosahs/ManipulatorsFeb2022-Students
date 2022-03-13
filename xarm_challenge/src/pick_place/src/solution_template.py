@@ -54,7 +54,7 @@ class Planner():
     self.robot = robot
     self.scene = scene
     self.move_group = move_group
-    self.self.display_trajectory_publisher = display_trajectory_publisher
+    self.display_trajectory_publisher = display_trajectory_publisher
     self.planning_frame = planning_frame
     self.eef_link = eef_link
     self.group_names = group_names
