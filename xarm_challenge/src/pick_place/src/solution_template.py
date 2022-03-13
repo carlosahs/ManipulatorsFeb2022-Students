@@ -196,16 +196,13 @@ class myNode():
     self.planner.addObstacles()
 
     # Plan a motion for this group to a desired pose for the end-effector
-    pose_goal = geometry_msgs.msg.Pose()
-    pose_goal.orientation.x = 1.0
-    pose_goal.orientation.y = 1.0
-    pose_goal.orientation.z = 1.0
-    pose_goal.orientation.w = 1.0
-    pose_goal.position.x = 0.8
-    pose_goal.position.y = 0.7
-    pose_goal.position.z = 0.5
+    rbox = geometry_msgs.msg.Pose()
 
-    self.planner.goToPose(pose_goal)
+    rbox.position.x = -0.516300
+    rbox.position.y = 0.400000
+    rbox.position.z = 1.044900
+
+    self.planner.goToPose(rbox)
 
     rospy.signal_shutdown("Task Completed")
 
