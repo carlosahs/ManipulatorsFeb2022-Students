@@ -31,7 +31,7 @@ class Planner():
 
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
-        "/move_group/display_trajectory_publisher",
+        "/move_group/display_planned_path",
         moveit_msgs.msg.DisplayTrajectory,
         queue_size=20
     )
