@@ -197,7 +197,7 @@ class myNode():
 
     # Plan a motion for this group to a desired pose for the end-effector
     # Get Box Position
-    rbox = geometry_msgs.msg.Pose()
+    gbox = geometry_msgs.msg.Pose()
 
     gbox.position.x = 0.214284
     gbox.position.y = 0.187592
