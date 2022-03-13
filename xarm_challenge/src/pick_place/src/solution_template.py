@@ -61,8 +61,26 @@ class Planner():
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
+    scene = self.scene
 
-    pass
+    start = rospy.get_time()
+    seconds = rospy.get_time()
+
+    while (seconds - start < timeout) and not rospy.is_shutdown():
+        attached_objects = scene.get_attached_objects([box_name])
+
+        is_attached = len(attached_objects.keys()) > 0
+        is_known = box_name in scene.get_known_object_names()
+
+        if (box_is_attached == is_attached) and (box_is_known == is_known):
+            return True
+
+        rospy.sleep(0.1)
+        seconds = rospy.get_time()
+
+    return False
+
+
 
   def addObstacles(self):
     #TO DO: Add obstables in the world
@@ -72,43 +90,58 @@ class Planner():
     **************************
     """ 
     #Cargo names
-    targets = ["RedBox",
-               "BlueBox",
-               "GreenBox"]
+    targets = [
+        "RedBox",
+        "BlueBox",
+        "GreenBox"
+    ]
+
+    targets_state = True
   
-    Rbox_pose = geometry_msgs.msg.PoseStamped()
-    Bbox_pose = geometry_msgs.msg.PoseStamped()
-    Gbox_pose = geometry_msgs.msg.PoseStamped()
+    # Red box
+    rbox_pose = geometry_msgs.msg.PoseStamped()
+    rbox_pose.header.frame_id = targets[0]
 
-    Rbox_pose.header.frame_id = targets[0]
-    Bbox_pose.header.frame_id = targets[1]
-    Gbox_pose.header.frame_id = targets[2]
+    rbox_pose.pose.orientation.w = 1.0
+    rbox_pose.pose.position.z = 0
+    rbox_name = targets[0]
 
-    # RED
-    Rbox_pose.pose.orientation.w = 1.0
-    Rbox_pose.pose.position.z = 0
-    Rbox_name = targets[0]
+    scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
 
-    # BLUE
-    Bbox_pose.pose.orientation.w = 2.0
-    Bbox_pose.pose.position.z = 0
-    Bbox_name = targets[1]
+    targets_state = targets_state and self.wait_for_state_update(targets[0], box_is_known=True)
 
-    # GREEN
-    Gbox_pose.pose.orientation.w = 3.0
-    Gbox_pose.pose.position.z = 0
-    Gbox_name = targets[2]
+    # Blue box
+    bbox_pose = geometry_msgs.msg.PoseStamped()
+    bbox_pose.header.frame_id = targets[1]
 
-    scene.add_box(Rbox_name, Rbox_pose, size=(0.06, 0.06, 0.06))
-    scene.add_box(Bbox_name, Bbox_pose, size=(0.06, 0.06, 0.06))
-    scene.add_box(Gbox_name, Gbox_pose, size=(0.06, 0.06, 0.06))
+    bbox_pose.pose.orientation.w = 2.0
+    bbox_pose.pose.position.z = 0
+    bbox_name = targets[1]
+
+    scene.add_box(bbox_name, bbox_pose, size=(0.06, 0.06, 0.06))
+
+    targets_state = targets_state and self.wait_for_state_update(targets[1], box_is_known=True)
+
+    # Green box
+    gbox_pose = geometry_msgs.msg.PoseStamped()
+    gbox_pose.header.frame_id = targets[2]
+
+    gbox_pose.pose.orientation.w = 3.0
+    gbox_pose.pose.position.z = 0
+    gbox_name = targets[2]
+
+    scene.add_box(gbox_name, gbox_pose, size=(0.06, 0.06, 0.06))
+
+    targets_state = targets_state and self.wait_for_state_update(targets[2], box_is_known=True)
 
     #goal names
-    boxes = ["DepositBoxGreen",
-              "DepositBoxRed",
-              "DepositBoxBlue"]
+    boxes = [
+        "DepositBoxGreen",
+        "DepositBoxRed",
+        "DepositBoxBlue"
+    ]
 
-    
+    return targets_state
 
   def goToPose(self,pose_goal):
     #TO DO: Code used to move to a given position using move it
