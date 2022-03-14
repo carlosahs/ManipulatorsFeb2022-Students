@@ -246,7 +246,9 @@ class myNode():
 
     gbox_pos = translation_quaternion_matrix(gbox_trans, gbox_rot)
 
-    print(np.dot(xarm_pos, gbox_pos))
+    final_pos = np.dot(xarm_pos, gbox_pos)
+    print(translation_from_matrix(final_pos))
+    print(quaternion_from_matrix(final_pos))
 
     # gbox.position.x = current_pos.pose.position.x
     # gbox.position.y = current_pos.pose.position.y
