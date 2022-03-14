@@ -185,8 +185,14 @@ class myNode():
 
   def tf_goal(self, goal):
     #TO DO:Use tf2 to retrieve the position of the target with respect to the proper reference frame
-    
-    pass
+    rate = rospy.Rate(10.0)
+    while not rospy.is_shutdown():
+      try:
+        trans = self.tfBuffer.lookup_transform(goal, 'link_tcp', rospy.Time())
+        return trans
+      except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+        rate.sleep()
+        continue
 
 
   def main(self):
@@ -202,11 +208,11 @@ class myNode():
     # gbox.position.y = 0.187592
     # gbox.position.z = 0.001827
 
-    gbox.position.x = 0.186
-    gbox.position.y = 0.166
-    gbox.position.z = 0.222
-
     current_pos = self.planner.xarm_group.get_current_pose("link_tcp")
+
+    gbox.position.x = current_pos.pose.position.x - 0.166
+    gbox.position.y = current_pos.pose.position.y + 0.186
+    gbox.position.z = current_pos.pose.position.z
 
     gbox.orientation = current_pos.pose.orientation
 
