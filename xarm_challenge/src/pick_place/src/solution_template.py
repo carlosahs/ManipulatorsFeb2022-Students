@@ -234,18 +234,19 @@ class myNode():
     # gbox.position.z = 0.001827
 
     xarm_pos_inv = self.tf_goal("link_base")
-    gbox_pos = self.tf_goal("GreenBox")
+    gbox_tf_pos = self.tf_goal("GreenBox")
 
     xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
     xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
 
     xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
 
-    print(xarm_pos)
-    print(xarm_trans_inv)
-    print(xarm_rot_inv)
+    gbox_trans = get_translation_matrix(gbox_tf_pos.transform.translation)
+    gbox_rot = get_quaternion_matrix(gbox_tf_pos.transform.rotation)
 
-    print(type(xarm_pos_inv.transform.translation))
+    gbox_pos = translation_quaternion_matrix(gbox_trans, gbox_rot)
+
+    print(np.dot(xarm_pos, gbox_pos))
 
     # gbox.position.x = current_pos.pose.position.x
     # gbox.position.y = current_pos.pose.position.y
