@@ -212,14 +212,11 @@ class myNode():
     self.planner.addObstacles()
     self.planner.addObstacles()
 
-    pick = self.getGoal("pick")
-    print(type(pick.status), type(pick.goal))
-
     # Get Goal
     while True:
       pick = self.getGoal("pick")
-
-      if pick.status == True:
+      # print(pick)
+      if pick.status == True and pick.goal != "End":
         # Get the box
         xarm_pos_inv = self.tf_goal("link_base")
         box_tf_pos = self.tf_goal(pick.goal)
@@ -234,16 +231,16 @@ class myNode():
         # Calculus for the movement
         xarm2gbox = np.dot(xarm_pos, box_pos)
         aux_z = xarm2gbox[2][3]
-        xarm2gbox[2][3] = -0.3
+        xarm2gbox[2][3] = -0.4
         self.move2goal(xarm2gbox)
 
         xarm2gbox[2][3] = aux_z
         self.move2goal(xarm2gbox)
-        self.planner.attachBox(box)
+        self.planner.attachBox(pick.goal)
         
         place = self.getGoal("place")
-
-        if place.status == True:
+        # print(place)
+        if (place.status == True and place.goal != "End") or place != None:
           # Go to deposit
           xarm_pos_inv = self.tf_goal("link_base")
           dep_tf_pos = self.tf_goal(place.goal)
@@ -259,7 +256,7 @@ class myNode():
           # Calculus for the movement
           xarm2gbox = np.dot(xarm_pos, dep_pos)
           self.move2goal(xarm2gbox)
-          self.planner.detachBox(box)
+          self.planner.detachBox(pick.goal)
         
         else: 
           break
