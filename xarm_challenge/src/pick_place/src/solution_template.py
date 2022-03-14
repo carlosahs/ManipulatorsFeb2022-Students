@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import rospy
 import sys
@@ -224,8 +224,8 @@ class myNode():
     box = geometry_msgs.msg.Pose()
     # Boxes and Deposits
     for box, deposit in zip(BOXES, DEPOSITS):
+      print(box)
       # Get the box
-      self.planner.attachBox(box)
       xarm_pos_inv = self.tf_goal("link_base")
       box_tf_pos = self.tf_goal(box)
       # Calculus for the arm position
@@ -237,8 +237,8 @@ class myNode():
       box_rot = get_quaternion_matrix(box_tf_pos.transform.rotation)
       box_pos = translation_quaternion_matrix(box_trans, box_rot)
       # Calculus for the movement
-      xarm2gbox = np.dot(xarm_pos, box_pos)
-      self.move2goal(xarm2gbox)
+      xarm2box = np.dot(xarm_pos, box_pos)
+      self.move2goal(xarm2box)
       self.planner.attachBox(box)
 
       # Go to deposit
@@ -254,8 +254,8 @@ class myNode():
       dep_pos = translation_quaternion_matrix(dep_trans, dep_rot)
       dep_pos[2][3] = -0.2
       # Calculus for the movement
-      xarm2gbox = np.dot(xarm_pos, dep_pos)
-      self.move2goal(xarm2gbox)
+      xarm2dep = np.dot(xarm_pos, dep_pos)
+      self.move2goal(xarm2dep)
       self.planner.detachBox(box)
 
     rospy.signal_shutdown("Task Completed")
