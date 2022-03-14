@@ -219,9 +219,10 @@ class myNode():
 
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
-
-    pass
-
+    try:
+        request_goal = rospy.ServiceProxy("RequestGoal", RequestGoal)
+    except rospy.ServiceException as e:
+        print("Service calll failed: %s" % e)
 
   def tf_goal(self, goal):
     #TO DO:Use tf2 to retrieve the position of the target with respect to the proper reference frame

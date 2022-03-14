@@ -145,7 +145,7 @@ class myNode():
     rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
       try:
-        trans = self.tfBuffer.lookup_transform(goal, 'link_eef', rospy.Time())
+        trans = self.tfBuffer.lookup_transform(goal, 'link_tcp', rospy.Time())
         return trans
       except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
         rate.sleep()
