@@ -202,6 +202,23 @@ class myNode():
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
 
+  def move2goal(self, transform):
+      trans = translation_from_matrix(transform)
+      quat_rot = quaternion_from_matrix(transform)
+
+      goal = geometry_msgs.msg.Pose()
+
+      goal.position.x = trans[0]
+      goal.position.y = trans[1]
+      goal.position.z = 0.200 # trans[2]
+
+      goal.orientation.x = quat_rot[0]
+      goal.orientation.z = quat_rot[1]
+      goal.orientation.y = quat_rot[2]
+      goal.orientation.w = quat_rot[3]
+
+      self.planner.goToPose(goal)
+
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
 
@@ -246,9 +263,9 @@ class myNode():
 
     gbox_pos = translation_quaternion_matrix(gbox_trans, gbox_rot)
 
-    final_pos = np.dot(xarm_pos, gbox_pos)
-    print(translation_from_matrix(final_pos))
-    print(quaternion_from_matrix(final_pos))
+    xarm2gbox = np.dot(xarm_pos, gbox_pos)
+
+    self.move2goal(xarm2gbox)
 
     # gbox.position.x = current_pos.pose.position.x
     # gbox.position.y = current_pos.pose.position.y
