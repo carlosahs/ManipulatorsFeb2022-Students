@@ -170,7 +170,7 @@ class Planner():
 
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
-    rospy.wait_fro_service("link_attacher_node/attach")
+    rospy.wait_for_service("link_attacher_node/attach")
 
     xgripper = self.xgripper
 
