@@ -210,11 +210,11 @@ class myNode():
 
       goal.position.x = trans[0]
       goal.position.y = trans[1]
-      goal.position.z = 0.200 # trans[2]
+      goal.position.z = trans[2]
 
       goal.orientation.x = quat_rot[0]
-      goal.orientation.z = quat_rot[1]
-      goal.orientation.y = quat_rot[2]
+      goal.orientation.y = quat_rot[1]
+      goal.orientation.z = quat_rot[2]
       goal.orientation.w = quat_rot[3]
 
       self.planner.goToPose(goal)
@@ -264,6 +264,8 @@ class myNode():
     gbox_pos = translation_quaternion_matrix(gbox_trans, gbox_rot)
 
     xarm2gbox = np.dot(xarm_pos, gbox_pos)
+
+    print(xarm2gbox)
 
     self.move2goal(xarm2gbox)
 
