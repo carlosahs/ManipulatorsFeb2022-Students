@@ -170,6 +170,8 @@ class Planner():
 
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
+    rospy.wait_fro_service("link_attacher_node/attach")
+
     xgripper = self.xgripper
 
     xgripper.set_named_target("open")
@@ -212,10 +214,10 @@ class myNode():
       goal.position.y = trans[1]
       goal.position.z = trans[2]
 
-      goal.orientation.x = quat_rot[0]
-      goal.orientation.y = quat_rot[1]
-      goal.orientation.z = quat_rot[2]
-      goal.orientation.w = quat_rot[3]
+      goal.orientation.x = 1.0 # quat_rot[0]
+      goal.orientation.y = 0.0 # quat_rot[1]
+      goal.orientation.z = 0.0 # quat_rot[2]
+      goal.orientation.w = 0.0 # quat_rot[3]
 
       self.planner.goToPose(goal)
 
@@ -257,6 +259,8 @@ class myNode():
     xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
 
     xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
+
+    print(xarm_pos)
 
     gbox_trans = get_translation_matrix(gbox_tf_pos.transform.translation)
     gbox_rot = get_quaternion_matrix(gbox_tf_pos.transform.rotation)
