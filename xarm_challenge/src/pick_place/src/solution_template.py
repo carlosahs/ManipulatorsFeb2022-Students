@@ -173,6 +173,9 @@ class myNode():
     #TO DO: Initialise ROS and create the service calls
     rospy.init_node('solution', anonymous=True)
 
+    self.tfBuffer = tf2_ros.Buffer()
+    self.listener = tf2_ros.TransformListener(self.tfBuffer)
+
     # Good practice trick, wait until the required services are online before continuing with the aplication
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
@@ -209,6 +212,9 @@ class myNode():
     # gbox.position.z = 0.001827
 
     current_pos = self.planner.xarm_group.get_current_pose("link_tcp")
+    gbox_pos = self.tf_goal("GreenBox")
+
+    print(gbox_pos)
 
     gbox.position.x = current_pos.pose.position.x - 0.166
     gbox.position.y = current_pos.pose.position.y + 0.186
