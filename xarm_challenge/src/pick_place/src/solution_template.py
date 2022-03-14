@@ -14,18 +14,6 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
-#Cargo names
-BOXES = [
-  "GreenBox",
-  "RedBox",
-  "BlueBox",
-]
-#goal names
-DEPOSITS = [
-  "DepositBoxGreen",
-  "DepositBoxRed",
-  "DepositBoxBlue"
-]
 
 def translation_quaternion_matrix(trans_mat, quat_mat):
     return np.dot(trans_mat, quat_mat)
@@ -152,10 +140,10 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
-        self.xgripper.set_named_target("open")
-        self.xgripper.go(wait = True)
-        self.xgripper.stop()
-        self.xgripper.clear_pose_targets()
+        # self.xgripper.set_named_target("open")
+        # self.xgripper.go(wait = True)
+        # self.xgripper.stop()
+        # self.xgripper.clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
@@ -164,10 +152,10 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
-        self.xgripper.set_named_target("close")
-        self.xgripper.go(wait = True)
-        self.xgripper.stop()
-        self.xgripper.clear_pose_targets()
+        # self.xgripper.set_named_target("close")
+        # self.xgripper.go(wait = True)
+        # self.xgripper.stop()
+        # self.xgripper.clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
@@ -200,6 +188,11 @@ class myNode():
 
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
+    try:
+        getObj = rospy.ServiceProxy('RequestGoal', RequestGoal)
+        return getObj(action)
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
     pass
 
   def tf_goal(self, goal):
@@ -219,44 +212,60 @@ class myNode():
     self.planner.addObstacles()
     self.planner.addObstacles()
 
-    # Plan a motion for this group to a desired pose for the end-effector
-    # Get Box Position
-    box = geometry_msgs.msg.Pose()
-    # Boxes and Deposits
-    for box, deposit in zip(BOXES, DEPOSITS):
-      # Get the box
-      self.planner.attachBox(box)
-      xarm_pos_inv = self.tf_goal("link_base")
-      box_tf_pos = self.tf_goal(box)
-      # Calculus for the arm position
-      xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
-      xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
-      xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
-      # Calculus for the box position
-      box_trans = get_translation_matrix(box_tf_pos.transform.translation)
-      box_rot = get_quaternion_matrix(box_tf_pos.transform.rotation)
-      box_pos = translation_quaternion_matrix(box_trans, box_rot)
-      # Calculus for the movement
-      xarm2gbox = np.dot(xarm_pos, box_pos)
-      self.move2goal(xarm2gbox)
-      self.planner.attachBox(box)
+    pick = self.getGoal("pick")
+    print(type(pick.status), type(pick.goal))
 
-      # Go to deposit
-      xarm_pos_inv = self.tf_goal("link_base")
-      dep_tf_pos = self.tf_goal(deposit)
-      # Calculus for the arm position
-      xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
-      xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
-      xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
-      # Calculus for the deposit position
-      dep_trans = get_translation_matrix(dep_tf_pos.transform.translation)
-      dep_rot = get_quaternion_matrix(dep_tf_pos.transform.rotation)
-      dep_pos = translation_quaternion_matrix(dep_trans, dep_rot)
-      dep_pos[2][3] = -0.2
-      # Calculus for the movement
-      xarm2gbox = np.dot(xarm_pos, dep_pos)
-      self.move2goal(xarm2gbox)
-      self.planner.detachBox(box)
+    # Get Goal
+    while True:
+      pick = self.getGoal("pick")
+
+      if pick.status == True:
+        # Get the box
+        xarm_pos_inv = self.tf_goal("link_base")
+        box_tf_pos = self.tf_goal(pick.goal)
+        # Calculus for the arm position
+        xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
+        xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
+        xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
+        # Calculus for the box position
+        box_trans = get_translation_matrix(box_tf_pos.transform.translation)
+        box_rot = get_quaternion_matrix(box_tf_pos.transform.rotation)
+        box_pos = translation_quaternion_matrix(box_trans, box_rot)
+        # Calculus for the movement
+        xarm2gbox = np.dot(xarm_pos, box_pos)
+        aux_z = xarm2gbox[2][3]
+        xarm2gbox[2][3] = -0.3
+        self.move2goal(xarm2gbox)
+
+        xarm2gbox[2][3] = aux_z
+        self.move2goal(xarm2gbox)
+        self.planner.attachBox(box)
+        
+        place = self.getGoal("place")
+
+        if place.status == True:
+          # Go to deposit
+          xarm_pos_inv = self.tf_goal("link_base")
+          dep_tf_pos = self.tf_goal(place.goal)
+          # Calculus for the arm position
+          xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
+          xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
+          xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
+          # Calculus for the deposit position
+          dep_trans = get_translation_matrix(dep_tf_pos.transform.translation)
+          dep_rot = get_quaternion_matrix(dep_tf_pos.transform.rotation)
+          dep_pos = translation_quaternion_matrix(dep_trans, dep_rot)
+          dep_pos[2][3] = -0.2
+          # Calculus for the movement
+          xarm2gbox = np.dot(xarm_pos, dep_pos)
+          self.move2goal(xarm2gbox)
+          self.planner.detachBox(box)
+        
+        else: 
+          break
+
+      else:
+        break
 
     rospy.signal_shutdown("Task Completed")
 
