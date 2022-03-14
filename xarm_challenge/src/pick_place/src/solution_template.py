@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import sys
@@ -14,6 +14,18 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
+#Cargo names
+BOXES = [
+  "RedBox",
+  "BlueBox",
+  "GreenBox"
+]
+#goal names
+DEPOSITS = [
+  "DepositBoxRed",
+  "DepositBoxBlue",
+  "DepositBoxGreen"
+]
 
 def translation_quaternion_matrix(trans_mat, quat_mat):
     return np.dot(trans_mat, quat_mat)
@@ -49,17 +61,17 @@ class Planner():
 
     # Display basic information
     planning_frame = xarm_group.get_planning_frame()
-    print "====== Planning frame: %s" % planning_frame
+    print("====== Planning frame: %s" % planning_frame)
 
     eef_link = xarm_group.get_end_effector_link()
-    print "====== End effector link is : %s" % eef_link
+    print("====== End effector link is : %s" % eef_link)
 
     group_names = robot.get_group_names()
-    print "====== Available Planning Groups: %s" % group_names
+    print("====== Available Planning Groups: %s" % group_names)
 
-    print "====== Printing robot state"
-    print robot.get_current_state()
-    print ''
+    print("====== Printing robot state")
+    print(robot.get_current_state())
+    print('')
 
     # Instantiate class variables
     self.robot = robot
@@ -109,6 +121,12 @@ class Planner():
         "BlueBox",
         "GreenBox"
     ]
+    #goal names
+    boxes = [
+        "DepositBoxGreen",
+        "DepositBoxRed",
+        "DepositBoxBlue"
+    ]
 
     targets_state = True
   
@@ -147,13 +165,6 @@ class Planner():
     scene.add_box(gbox_name, gbox_pose, size=(0.06, 0.06, 0.06))
 
     targets_state = targets_state and self.wait_for_state_update(targets[2], box_is_known=True)
-
-    #goal names
-    boxes = [
-        "DepositBoxGreen",
-        "DepositBoxRed",
-        "DepositBoxBlue"
-    ]
 
     return targets_state
 
@@ -212,10 +223,10 @@ class myNode():
       goal.position.y = trans[1]
       goal.position.z = trans[2]
 
-      goal.orientation.x = quat_rot[0]
-      goal.orientation.y = quat_rot[1]
-      goal.orientation.z = quat_rot[2]
-      goal.orientation.w = quat_rot[3]
+      goal.orientation.x = 1.0
+      goal.orientation.y = 0.0
+      goal.orientation.z = 0.0
+      goal.orientation.w = 0.0
 
       self.planner.goToPose(goal)
 
@@ -246,49 +257,38 @@ class myNode():
     # Get Box Position
     gbox = geometry_msgs.msg.Pose()
 
-    # gbox.position.x = 0.214284
-    # gbox.position.y = 0.187592
-    # gbox.position.z = 0.001827
+    # Boxes and Deposits
+    for box, deposit in zip(BOXES, DEPOSITS):
+      # Get the box
+      world_tf_pos = self.tf_goal("world")
+      xarm_pos_inv = self.tf_goal("link_base")
+      box_tf_pos = self.tf_goal(box)
 
-    xarm_pos_inv = self.tf_goal("link_base")
-    gbox_tf_pos = self.tf_goal("GreenBox")
+      xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
+      xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
+      xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
 
-    xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
-    xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
+      box_trans = get_translation_matrix(box_tf_pos.transform.translation)
+      box_rot = get_quaternion_matrix(box_tf_pos.transform.rotation)
 
-    xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
+      box_pos = translation_quaternion_matrix(box_trans, box_rot)
 
-    gbox_trans = get_translation_matrix(gbox_tf_pos.transform.translation)
-    gbox_rot = get_quaternion_matrix(gbox_tf_pos.transform.rotation)
+      xarm2gbox = np.dot(xarm_pos, box_pos)
+      self.move2goal(xarm2gbox)
 
-    gbox_pos = translation_quaternion_matrix(gbox_trans, gbox_rot)
+      # Go to deposit
+      dep_tf_pos = self.tf_goal(deposit)
+      xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
+      xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
+      xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
 
-    xarm2gbox = np.dot(xarm_pos, gbox_pos)
+      dep_trans = get_translation_matrix(dep_tf_pos.transform.translation)
+      dep_rot = get_quaternion_matrix(dep_tf_pos.transform.rotation)
 
-    print(xarm2gbox)
+      dep_pos = translation_quaternion_matrix(dep_trans, dep_rot)
 
-    self.move2goal(xarm2gbox)
-
-    # gbox.position.x = current_pos.pose.position.x
-    # gbox.position.y = current_pos.pose.position.y
-    # gbox.position.z = current_pos.pose.position.z
-    # 
-    # gbox.orientation = current_pos.pose.orientation
-
-    # self.planner.goToPose(gbox)
-
-    # Get green box deposit position
-    # deposit_gbox = geometry_msgs.msg.Pose()
-
-    # deposit_gbox.position.x = 0.041
-    # deposit_gbox.position.y = -0.464
-    # deposit_gbox.position.z = 0.049
-
-    # current_pos = self.planner.xarm_group.get_current_pose("link_eef")
-
-    # deposit_gbox.orientation = current_pos.pose.orientation
-
-    # self.planner.goToPose(deposit_gbox)
+      xarm2gbox = np.dot(xarm_pos, dep_pos)
+      self.move2goal(xarm2gbox)
 
     rospy.signal_shutdown("Task Completed")
 
