@@ -38,6 +38,7 @@ class Planner():
     
     # Instantiate a MoveGroupCommander object
     xarm_group = moveit_commander.MoveGroupCommander("xarm6")
+    xgripper = moveit_commander.MoveGroupCommander("xarm_gripper")
 
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
@@ -64,6 +65,7 @@ class Planner():
     self.robot = robot
     self.scene = scene
     self.xarm_group = xarm_group
+    self.xgripper = xgripper
     self.display_trajectory_publisher = display_trajectory_publisher
     self.planning_frame = planning_frame
     self.eef_link = eef_link
