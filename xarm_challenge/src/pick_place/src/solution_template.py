@@ -71,6 +71,8 @@ class Planner():
     self.eef_link = eef_link
     self.group_names = group_names
 
+    rospy.wait_for_service("link_attacher_node/attach")
+
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
     scene = self.scene
@@ -172,23 +174,19 @@ class Planner():
     #TO DO: Open the gripper and call the service that releases the box
     rospy.wait_for_service("link_attacher_node/attach")
 
-    xgripper = self.xgripper
-
-    xgripper.set_named_target("open")
-    xgripper.go(wait = True)
-
-    xgripper.stop()
-    xgripper.clear_pose_targets()
+    try:
+        attach = rospy.ServiceProxy('link_attacher_node/attach', AttachObject)
+        attach("xarm6", "left_finger", box_name, "right_finger")
+    except rospy.ServiceException as e:
+        print("Service calll failed: %s" % e)
 
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
-    xgripper = self.xgripper
-
-    xgripper.set_named_target("close")
-    xgripper.go(wait = True)
-
-    xgripper.stop()
-    xgripper.clear_pose_targets()
+    try:
+        attach = rospy.ServiceProxy("AttachObject", AttachObject)
+        attach(True, box_name)
+    except rospy.ServiceException as e:
+        print("Service calll failed: %s" % e)
 
 ######################################################################################
 
@@ -272,6 +270,8 @@ class myNode():
     print(xarm2gbox)
 
     self.move2goal(xarm2gbox)
+
+    self.planner.attachBox("GreenBox")
 
     # gbox.position.x = current_pos.pose.position.x
     # gbox.position.y = current_pos.pose.position.y
