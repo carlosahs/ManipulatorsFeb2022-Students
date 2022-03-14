@@ -172,11 +172,9 @@ class Planner():
 
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
-    rospy.wait_for_service("link_attacher_node/attach")
-
     try:
-        attach = rospy.ServiceProxy('link_attacher_node/attach', AttachObject)
-        attach("xarm6", "left_finger", box_name, "right_finger")
+        attach = rospy.ServiceProxy("AttachObject", AttachObject)
+        attach(False, box_name)
     except rospy.ServiceException as e:
         print("Service calll failed: %s" % e)
 
