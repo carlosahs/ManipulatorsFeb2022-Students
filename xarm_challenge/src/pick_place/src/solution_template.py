@@ -14,6 +14,16 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
+
+def translation_quaternion_matrix(trans_mat, quat_mat):
+    return np.dot(trans_mat, quat_mat)
+
+def get_translation_matrix(x, y, z):
+    return translation_matrix((x, y, z))
+
+def get_quaternion_matrix(x, y, z, w):
+    return quaternion_matrix((x, y, z, w))
+
 class Planner():
   def __init__(self):
     #TO DO: Initialise move it interface
@@ -215,24 +225,20 @@ class myNode():
     xarm_pos_inv = self.tf_goal("link_base")
     gbox_pos = self.tf_goal("GreenBox")
 
-    xarm_trans_inv = translation_matrix(
-        (
-            xarm_pos_inv.transform.translation.x,
-            xarm_pos_inv.transform.translation.y,
-            xarm_pos_inv.transform.translation.z,
-        )
+    xarm_trans_inv = get_translation_matrix(
+        xarm_pos_inv.transform.translation.x,
+        xarm_pos_inv.transform.translation.y,
+        xarm_pos_inv.transform.translation.z,
     )
 
-    xarm_rot_inv = quaternion_matrix(
-        (
-            xarm_pos_inv.transform.rotation.x,
-            xarm_pos_inv.transform.rotation.y,
-            xarm_pos_inv.transform.rotation.z,
-            xarm_pos_inv.transform.rotation.w,
-        )
+    xarm_rot_inv = get_quaternion_matrix(
+        xarm_pos_inv.transform.rotation.x,
+        xarm_pos_inv.transform.rotation.y,
+        xarm_pos_inv.transform.rotation.z,
+        xarm_pos_inv.transform.rotation.w,
     )
 
-    xarm_pos = inverse_matrix(np.dot(xarm_trans_inv, xarm_rot_inv))
+    xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
 
     print(xarm_pos)
     print(xarm_trans_inv)
