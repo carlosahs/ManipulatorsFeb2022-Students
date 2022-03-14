@@ -162,7 +162,7 @@ class Planner():
     xarm_group = self.xarm_group
 
     xarm_group.set_pose_target(pose_goal)
-    plan = xarm_group.go(wait=True)
+    xarm_group.go(wait=True)
 
     xarm_group.stop()
     xarm_group.clear_pose_targets()
@@ -170,14 +170,23 @@ class Planner():
 
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
-    
-    pass
+    xgripper = self.xgripper
 
+    xgripper.set_named_target("open")
+    xgripper.go(wait = True)
+
+    xgripper.stop()
+    xgripper.clear_pose_targets()
 
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
-    
-    pass
+    xgripper = self.xgripper
+
+    xgripper.set_named_target("close")
+    xgripper.go(wait = True)
+
+    xgripper.stop()
+    xgripper.clear_pose_targets()
 
 ######################################################################################
 
