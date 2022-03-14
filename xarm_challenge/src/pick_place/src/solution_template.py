@@ -6,6 +6,7 @@ import tf_conversions
 import tf2_ros
 import moveit_commander
 import moveit_msgs.msg
+import numpy as np
 from moveit_commander.conversions import pose_to_list
 import geometry_msgs.msg
 from path_planner.srv import *
@@ -211,18 +212,39 @@ class myNode():
     # gbox.position.y = 0.187592
     # gbox.position.z = 0.001827
 
-    current_pos = self.planner.xarm_group.get_current_pose("link_tcp")
+    xarm_pos_inv = self.tf_goal("link_base")
     gbox_pos = self.tf_goal("GreenBox")
 
-    print(gbox_pos)
+    xarm_trans = inverse_matrix(translation_matrix(
+        (
+            xarm_pos_inv.transform.translation.x,
+            xarm_pos_inv.transform.translation.y,
+            xarm_pos_inv.transform.translation.z,
+        )
+    ))
 
-    gbox.position.x = current_pos.pose.position.x - 0.166
-    gbox.position.y = current_pos.pose.position.y + 0.186
-    gbox.position.z = current_pos.pose.position.z
+    xarm_rot = inverse_matrix(quaternion_matrix(
+        (
+            xarm_pos_inv.transform.rotation.x,
+            xarm_pos_inv.transform.rotation.y,
+            xarm_pos_inv.transform.rotation.z,
+            xarm_pos_inv.transform.rotation.w,
+        )
+    ))
 
-    gbox.orientation = current_pos.pose.orientation
+    xarm_pos = np.dot(xarm_trans, xarm_rot)
 
-    self.planner.goToPose(gbox)
+    print(xarm_pos)
+    print(xarm_trans)
+    print(xarm_rot)
+
+    # gbox.position.x = current_pos.pose.position.x
+    # gbox.position.y = current_pos.pose.position.y
+    # gbox.position.z = current_pos.pose.position.z
+    # 
+    # gbox.orientation = current_pos.pose.orientation
+
+    # self.planner.goToPose(gbox)
 
     # Get green box deposit position
     # deposit_gbox = geometry_msgs.msg.Pose()
