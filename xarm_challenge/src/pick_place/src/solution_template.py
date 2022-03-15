@@ -182,6 +182,10 @@ class Planner():
 
         grasp.grasp_pose.pose.orientation = quat_msg
 
+        grasp.grasp_pose.pose.position.x = 0.0
+        grasp.grasp_pose.pose.position.y = 0.0
+        grasp.grasp_pose.pose.position.z = 0.0
+
         self.xgripper.pick(box_name, grasp)
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
