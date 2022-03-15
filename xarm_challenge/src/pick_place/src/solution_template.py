@@ -93,7 +93,7 @@ class Planner():
     # self.eef_link = eef_link
     # self.group_names = group_names
 
-  def _pick(self):
+  def _pick(self, box):
     frame_id = self.xarm_group.get_planning_frame()
     grasp = Grasp()
 
@@ -130,6 +130,8 @@ class Planner():
 
     self._open_gripper(grasp.pre_grasp_posture)
     self._close_gripper(grasp.grasp_posture)
+
+    self.xarm_group.pick(box, [grasp])
 
   def _open_gripper(self, posture):
     offset = 0.01
