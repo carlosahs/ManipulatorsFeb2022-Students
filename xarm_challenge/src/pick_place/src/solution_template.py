@@ -240,7 +240,7 @@ class Planner():
     #TO DO: Close the gripper and call the service that releases the box
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
-        attach(1, box_name)
+        # attach(1, box_name)
 
         self._pick(box_name)
         # self.xgripper.pick(box_name, grasp)
