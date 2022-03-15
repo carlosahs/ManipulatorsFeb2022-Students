@@ -83,9 +83,6 @@ class Planner():
     self.xarm_group = xarm_group
     self.xgripper = xgripper
     self.display_trajectory_publisher = display_trajectory_publisher
-
-    self.cargo_name = ''
-    self.has_cargo = False
     # self.planning_frame = planning_frame
     # self.eef_link = eef_link
     # self.group_names = group_names
@@ -156,9 +153,6 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
-
-        self.cargo_name = ''
-        self.has_cargo = False
         # self.xgripper.set_named_target("open")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
@@ -171,9 +165,6 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
-
-        self.cargo = box_name
-        self.has_cargo = True
 
         grasp = Grasp()
         # self.xgripper.set_named_target("close")
@@ -191,6 +182,9 @@ class myNode():
     rospy.init_node('solution', anonymous=True)
     self.tfBuffer = tf2_ros.Buffer()
     self.listener = tf2_ros.TransformListener(self.tfBuffer)
+
+    self.box_name = ''
+    self.box_is_picked = False
     # Good practice trick, wait until the required services are online before continuing with the aplication
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
@@ -241,6 +235,9 @@ class myNode():
       # Pick box
       self.planner.attachBox(box)
 
+      self.box_name = box
+      self.box_is_picked = True
+
       # Move up with box
       self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
 
@@ -255,7 +252,10 @@ class myNode():
       self._move2goal(base2deposit_pose, base2deposit_pose_up)
 
       # Place cargo
-      self.planner.detachBox(self.planner.cargo)
+      self.planner.detachBox(self.box_name)
+
+      self.box_name = ''
+      self.box_is_picked = False
 
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
