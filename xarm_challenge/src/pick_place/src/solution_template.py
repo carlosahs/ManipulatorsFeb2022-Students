@@ -180,11 +180,8 @@ class myNode():
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
 
-  def _move2goal(self, goal):
-      xarm_pos = inverse_matrix(get_target_position(self.tf_goal("link_base")))
-      goal_pose = get_target_position(self.tf_goal(goal))
-
-      transform = np.dot(xarm_pos, goal_pose)
+  def _move2goal(self, reference, goal):
+      transform = np.dot(reference, goal)
 
       trans = translation_from_matrix(transform)
       quat_rot = quaternion_from_matrix(transform)
@@ -213,6 +210,9 @@ class myNode():
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
 
+  def _get_goal_pose(self, goal):
+      return get_target_position(self.tf_goal(goal))
+
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
     try:
@@ -239,6 +239,8 @@ class myNode():
     self.planner.addObstacles()
 
     # Move to green box and then to deposit
+    xarm_pose = self._get_xarm_pose()
+    gbox_pose = 
     self._move2goal(BOXES[0])
     self._move2goal(DEPOSITS[0])
 
