@@ -213,62 +213,8 @@ class myNode():
     #TO DO: Main code that contains the aplication
     self.planner = Planner()
     self.planner.addObstacles()
-    self.planner.addObstacles()
-
-    # Get Goal
-    while True:
-      pick = self.getGoal("pick")
-      # print(pick)
-      if pick.status == True and pick.goal != "End":
-        # Get the box
-        xarm_pos_inv = self.tf_goal("link_base")
-        box_tf_pos = self.tf_goal(pick.goal)
-        # Calculus for the arm position
-        xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
-        xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
-        xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
-        # Calculus for the box position
-        box_trans = get_translation_matrix(box_tf_pos.transform.translation)
-        box_rot = get_quaternion_matrix(box_tf_pos.transform.rotation)
-        box_pos = translation_quaternion_matrix(box_trans, box_rot)
-        # Calculus for the movement
-        xarm2gbox = np.dot(xarm_pos, box_pos)
-        aux_z = xarm2gbox[2][3]
-        xarm2gbox[2][3] = -0.2
-        self.move2goal(xarm2gbox)
-
-        xarm2gbox[2][3] = aux_z
-        self.move2goal(xarm2gbox)
-        self.planner.attachBox(pick.goal)
-        
-        place = self.getGoal("place")
-        # print(place)
-        if (place.status == True and place.goal != "End") or place != None:
-          # Go to deposit
-          xarm_pos_inv = self.tf_goal("link_base")
-          dep_tf_pos = self.tf_goal(place.goal)
-          # Calculus for the arm position
-          xarm_trans_inv = get_translation_matrix(xarm_pos_inv.transform.translation)
-          xarm_rot_inv = get_quaternion_matrix(xarm_pos_inv.transform.rotation)
-          xarm_pos = inverse_matrix(translation_quaternion_matrix(xarm_trans_inv, xarm_rot_inv))
-          # Calculus for the deposit position
-          dep_trans = get_translation_matrix(dep_tf_pos.transform.translation)
-          dep_rot = get_quaternion_matrix(dep_tf_pos.transform.rotation)
-          dep_pos = translation_quaternion_matrix(dep_trans, dep_rot)
-          dep_pos[2][3] = -0.2
-          # Calculus for the movement
-          xarm2gbox = np.dot(xarm_pos, dep_pos)
-          self.move2goal(xarm2gbox)
-          self.planner.detachBox(pick.goal)
-        
-        else: 
-          break
-
-      else:
-        break
 
     rospy.signal_shutdown("Task Completed")
-
 
 if __name__ == '__main__':
   try:
