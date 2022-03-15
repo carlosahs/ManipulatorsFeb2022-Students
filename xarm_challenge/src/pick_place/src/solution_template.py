@@ -14,6 +14,8 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
+OPERATIONAL_HEIGHT = 0.2
+
 BOXES = [
     "GreenBox",
     "RedBox",
@@ -205,7 +207,7 @@ class myNode():
       self.planner.goToPose(goal)
 
   def _move_to_box(self, box):
-      box_pose = get_target_position(self.tf_goal(box))
+      box_origin = get_target_position(self.tf_goal(box))
 
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
