@@ -31,15 +31,19 @@ DEPOSITS = [
 def translation_quaternion_matrix(trans_mat, quat_mat):
     return np.dot(trans_mat, quat_mat)
 
-def get_translation_matrix(trans):
-    return translation_matrix((trans.x, trans.y, trans.z))
-
-def get_quaternion_matrix(quat_rot):
-    return quaternion_matrix((quat_rot.x, quat_rot.y, quat_rot.z, quat_rot.w))
-
 def get_target_position(target):
-    trans = get_translation_matrix(target.transform.translation)
-    quat_rot = get_quaternion_matrix(target.transform.rotation)
+    trans = translation_matrix((
+        target.transform.translation.x,
+        target.transform.translation.y,
+        target.transform.translation.z
+    ))
+
+    quat_rot = quaternioin_matrix((
+        target.transform.rotation.x,
+        target.transform.rotation.y,
+        target.transform.rotation.z,
+        target.transform.rotation.w
+    ))
 
     return translation_quaternion_matrix(trans, quat_rot)
 
@@ -211,7 +215,7 @@ class myNode():
       box_pose = self._get_goal_pose(box)
 
       base2box_pose = np.dot(xarm_pose, box_pose)
-      base2box_pose_up = get_translation_matrix((0, 0, OPERATIONAL_HEIGHT))
+      base2box_pose_up = translation_matrix()
 
       self._move2goal(base2box_pose, base2box_pose_up)
 
