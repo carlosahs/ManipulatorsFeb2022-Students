@@ -150,17 +150,15 @@ class Planner():
 
   def _close_gripper(self, posture):
     # Add both finger joints of xarm6 robot
-    posture.joint_names.resize(2)
+    posture.joint_names.append("left_finger_joint")
+    posture.joint_names.append("right_finger_joint")
 
-    posture.joint_names[0] = "left_finger_joint"
-    posture.joint_names[1] = "right_finger_joint"
+    # Set fingers open
+    posture.points.append(JointTrajectoryPoint())
 
-    # Set fingers close
-    posture.points.resize(1)
+    posture.points[0].positions.append(0.0)
+    posture.points[0].positions.append(0.0)
 
-    posture.points[0].positions.resize(2)
-    posture.points[0].positions[0] = 0.0
-    posture.points[0].positions[1] = 0.0
     posture.points[0].time_from_start = rospy.rostime.Duration(0.5)
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
