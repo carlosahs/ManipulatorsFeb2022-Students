@@ -125,8 +125,8 @@ class Planner():
     grasp.post_grasp_retreat.direction.header.frame_id = frame_id
 
     grasp.post_grasp_retreat.direction.vector.z = 1.0
-    grasp.post_grasp_approach.min_distance = 0.1
-    grasp.post_grasp_approach.desired_distance = 0.25
+    grasp.post_grasp_retreat.min_distance = 0.1
+    grasp.post_grasp_retreat.desired_distance = 0.25
 
     self._open_gripper(grasp.pre_grasp_posture)
     self._close_gripper(grasp.grasp_posture)
@@ -244,6 +244,7 @@ class Planner():
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
+        self._pick(box_name)
         # self.xgripper.pick(box_name, grasp)
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
