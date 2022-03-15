@@ -94,10 +94,11 @@ class Planner():
     # self.group_names = group_names
 
   def _grasp_setup(self):
+    frame_id = self.xgripper.get_planning_frame()
     grasp = Grasp()
 
     # Grasp pose setup
-    grasp.grasp_pose.header.frame_id = "world"
+    grasp.grasp_pose.header.frame_id = frame_id
 
     quat_rot = quaternion_from_euler(-pi / 2, -pi / 4, -pi / 2)
     quat_msg = geometry_msgs.msg.Quaternion(
@@ -109,12 +110,26 @@ class Planner():
 
     grasp.grasp_pose.pose.orientation = quat_msg
 
-    grasp.grasp_pose.pose.position.x = 0.0
+    grasp.grasp_pose.pose.position.x = 0.415
     grasp.grasp_pose.pose.position.y = 0.0
-    grasp.grasp_pose.pose.position.z = 0.0
+    grasp.grasp_pose.pose.position.z = 0.5
 
     # Pre-grasp approach
-    grasp.pre_grasp_approach.direction.header.frame_id = "world"
+    grasp.pre_grasp_approach.direction.header.frame_id = frame_id
+
+    grasp.pre_grasp_approach.direction.vector.x = 1.0
+    grasp.pre_grasp_approach.min_distance = 0.1
+    grasp.pre_grasp_approach.desired_distance = 0.115
+
+    # Post-grasp retreat
+    grasp.post_grasp_retreat.direction.header.frame_id = frame_id
+
+    grasp.post_grasp_retreat.direction.vector.z = 1.0
+    grasp.post_grasp_approach.min_distance = 0.1
+    grasp.post_grasp_approach.desired_distance = 0.25
+
+  def _pick(self):
+      pass
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
