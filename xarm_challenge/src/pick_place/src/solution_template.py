@@ -145,7 +145,7 @@ class Planner():
 
     posture.points[0].positions.resize(2)
     posture.points[0].positions[0] = BOX_LENGHT + offset
-    posture.points[0].positions[0] = BOX_LENGHT + offset
+    posture.points[0].positions[1] = BOX_LENGHT + offset
     posture.points[0].time_from_start = rospy.rostime.Duration(0.5)
 
   def _close_gripper(self, posture):
@@ -160,7 +160,7 @@ class Planner():
 
     posture.points[0].positions.resize(2)
     posture.points[0].positions[0] = 0.0
-    posture.points[0].positions[0] = 0.0
+    posture.points[0].positions[1] = 0.0
     posture.points[0].time_from_start = rospy.rostime.Duration(0.5)
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
