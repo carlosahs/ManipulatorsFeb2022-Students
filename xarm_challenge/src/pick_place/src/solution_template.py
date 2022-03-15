@@ -14,6 +14,18 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
+BOXES = [
+    "GreenBox",
+    "RedBox",
+    "BlueBox"
+]
+
+DEPOSITS = [
+    "DepositBoxGreen",
+    "DepositBoxRed",
+    "DepositBoxBlue"
+]
+
 def translation_quaternion_matrix(trans_mat, quat_mat):
     return np.dot(trans_mat, quat_mat)
 
