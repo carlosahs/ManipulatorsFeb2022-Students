@@ -7,10 +7,10 @@ import tf2_ros
 import moveit_commander
 import moveit_msgs.msg
 import numpy as np
-from moveit_commander.conversions import pose_to_list
 import geometry_msgs.msg
 from path_planner.srv import *
 from tf.transformations import *
+from trajectory_msgs.msg import JointTrajectoryPoint
 from moveit_msgs.msg import Grasp
 from math import pi
 
@@ -137,10 +137,8 @@ class Planner():
     offset = 0.01
 
     # Add both finger joints of xarm6 robot
-    posture.joint_names.resize(2)
-
-    posture.joint_names[0] = "left_finger_joint"
-    posture.joint_names[1] = "right_finger_joint"
+    posture.joint_names.append("left_finger_joint")
+    posture.joint_names.append("right_finger_joint")
 
     # Set fingers open
     posture.points.resize(1)
