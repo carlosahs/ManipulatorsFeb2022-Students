@@ -38,7 +38,7 @@ def get_target_position(target):
         target.transform.translation.z
     ))
 
-    quat_rot = quaternioin_matrix((
+    quat_rot = quaternion_matrix((
         target.transform.rotation.x,
         target.transform.rotation.y,
         target.transform.rotation.z,
