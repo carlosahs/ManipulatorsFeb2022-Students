@@ -271,6 +271,7 @@ class myNode():
 
     # Move to green box
     self._move_to_box(BOXES[0])
+    self._move_to_deposit(DEPOSITS[0])
 
     rospy.signal_shutdown("Task Completed")
 
