@@ -240,9 +240,14 @@ class myNode():
 
     # Move to green box and then to deposit
     xarm_pose = self._get_xarm_pose()
-    gbox_pose = 
-    self._move2goal(BOXES[0])
-    self._move2goal(DEPOSITS[0])
+    box_pose = self._get_goal_pose(BOXES[0])
+    deposit_pose = self._get_goal_pose(DEPOSITS[0])
+
+    self._move2goal(xarm_pose, box_pose)
+
+    xarm_pose = self._get_xarm_pose()
+
+    self._move2goal(xarm_pose, deposit_pose)
 
     rospy.signal_shutdown("Task Completed")
 
