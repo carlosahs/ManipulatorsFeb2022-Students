@@ -232,6 +232,10 @@ class myNode():
     self.planner = Planner()
     self.planner.addObstacles()
 
+    # Move to green box and then to deposit
+    self._move2goal(BOXES[0])
+    self._move2goal(DEPOSITS[0])
+
     rospy.signal_shutdown("Task Completed")
 
 if __name__ == '__main__':
