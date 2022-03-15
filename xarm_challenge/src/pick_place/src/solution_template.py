@@ -180,19 +180,23 @@ class myNode():
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
 
-  def move2goal(self, transform):
+  def _move2goal(self, transform):
       trans = translation_from_matrix(transform)
       quat_rot = quaternion_from_matrix(transform)
+
       goal = geometry_msgs.msg.Pose()
+
       # Positions
       goal.position.x = trans[0]
       goal.position.y = trans[1]
       goal.position.z = trans[2]
+
       # Orientations
       goal.orientation.x = 1.0
       goal.orientation.y = 0.0
       goal.orientation.z = 0.0
       goal.orientation.w = 0.0
+
       self.planner.goToPose(goal)
 
   def getGoal(self,action):
