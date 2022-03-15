@@ -94,7 +94,7 @@ class Planner():
     # self.group_names = group_names
 
   def _grasp_setup(self):
-    frame_id = self.xgripper.get_planning_frame()
+    frame_id = self.xarm_group.get_planning_frame()
     grasp = Grasp()
 
     # Grasp pose setup
