@@ -35,6 +35,12 @@ def get_translation_matrix(trans):
 def get_quaternion_matrix(quat_rot):
     return quaternion_matrix((quat_rot.x, quat_rot.y, quat_rot.z, quat_rot.w))
 
+def get_target_position(target):
+    trans = get_translation_matrix(target.transform.translation)
+    quat_rot = get_quatenrion_matrix(target.transform.rotation)
+
+    return translation_quaternion_matrix(trans, quat_rot)
+
 class Planner():
   def __init__(self):
     #TO DO: Initialise move it interface
