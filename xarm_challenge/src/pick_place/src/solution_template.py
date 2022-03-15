@@ -207,6 +207,12 @@ class myNode():
 
       self.planner.goToPose(goal)
 
+  def _move_to_box(self, box):
+      box_pose = get_target_position(self.tf_goal(box))
+
+  def _get_xarm_pose(self):
+      return inverse_matrix(get_target_position(self.tf_goal("link_base")))
+
   def getGoal(self,action):
     #TO DO: Call the service that will provide you with a suitable target for the movement
     try:
