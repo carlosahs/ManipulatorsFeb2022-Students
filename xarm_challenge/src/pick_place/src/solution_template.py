@@ -141,6 +141,8 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
+
+        grasp = Grasp()
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
