@@ -93,7 +93,7 @@ class Planner():
     # self.eef_link = eef_link
     # self.group_names = group_names
 
-  def _grasp_setup(self):
+  def _pick(self):
     frame_id = self.xarm_group.get_planning_frame()
     grasp = Grasp()
 
@@ -128,9 +128,10 @@ class Planner():
     grasp.post_grasp_approach.min_distance = 0.1
     grasp.post_grasp_approach.desired_distance = 0.25
 
-    self._pick(grasp.pre_grasp_posture)
+    self._open_gripper(grasp.pre_grasp_posture)
+    self._close_gripper(grasp.grasp_posture)
 
-  def _pick(self, posture):
+  def _open_gripper(self, posture):
     # Add both finger joints of xarm6 robot
     posture.joint_names.resize(2)
 
