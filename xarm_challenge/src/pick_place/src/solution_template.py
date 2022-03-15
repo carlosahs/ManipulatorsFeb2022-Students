@@ -176,11 +176,12 @@ class Planner():
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
+        self.xgripper.set_named_target("close")
+        self.xgripper.go(wait = True)
+        self.xgripper.stop()
+        self.xgripper.clear_pose_targets()
+
         return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=True)
-        # self.xgripper.set_named_target("close")
-        # self.xgripper.go(wait = True)
-        # self.xgripper.stop()
-        # self.xgripper.clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
