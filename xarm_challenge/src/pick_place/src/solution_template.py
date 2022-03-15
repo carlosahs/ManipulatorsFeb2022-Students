@@ -112,6 +112,7 @@ class Planner():
     scene = self.scene
 
     targets_state = True
+
     # Red box
     rbox_pose = geometry_msgs.msg.PoseStamped()
     rbox_pose.header.frame_id = BOXES[0]
@@ -119,7 +120,9 @@ class Planner():
     rbox_pose.pose.position.z = 0
     rbox_name = BOXES[0]
     scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
+    
     targets_state = targets_state and self.wait_for_state_update(BOXES[0], box_is_known=True)
+
     # Blue box
     bbox_pose = geometry_msgs.msg.PoseStamped()
     bbox_pose.header.frame_id = BOXES[1]
@@ -127,7 +130,9 @@ class Planner():
     bbox_pose.pose.position.z = 0
     bbox_name = BOXES[1]
     scene.add_box(bbox_name, bbox_pose, size=(0.06, 0.06, 0.06))
+
     targets_state = targets_state and self.wait_for_state_update(BOXES[1], box_is_known=True)
+
     # Green box
     gbox_pose = geometry_msgs.msg.PoseStamped()
     gbox_pose.header.frame_id = BOXES[2]
@@ -135,6 +140,7 @@ class Planner():
     gbox_pose.pose.position.z = 0
     gbox_name = BOXES[2]
     scene.add_box(gbox_name, gbox_pose, size=(0.06, 0.06, 0.06))
+
     targets_state = targets_state and self.wait_for_state_update(BOXES[2], box_is_known=True)
 
     return targets_state
@@ -166,13 +172,15 @@ class Planner():
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
-        grasp = Grasp()
+        return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=True)
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
         # self.xgripper.clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
+
+        return False
 
 ######################################################################################
 
