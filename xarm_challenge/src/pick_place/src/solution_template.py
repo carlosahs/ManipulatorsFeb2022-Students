@@ -184,6 +184,9 @@ class myNode():
       trans = translation_from_matrix(transform)
       quat_rot = quaternion_from_matrix(transform)
 
+      _go_to_pose(trans, quat_rot)
+
+  def _go_to_pose(self, trans, quat_rot)
       goal = geometry_msgs.msg.Pose()
 
       # Positions
