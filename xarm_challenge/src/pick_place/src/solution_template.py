@@ -71,6 +71,8 @@ class Planner():
     # Display basic information
     planning_frame = xarm_group.get_planning_frame()
     print("====== Planning frame: %s" % planning_frame)
+    planning_frame = xgripper.get_planning_frame()
+    print("====== Planning frame: %s" % planning_frame)
     eef_link = xarm_group.get_end_effector_link()
     print("====== End effector link is : %s" % eef_link)
     group_names = robot.get_group_names()
@@ -88,6 +90,29 @@ class Planner():
     # self.planning_frame = planning_frame
     # self.eef_link = eef_link
     # self.group_names = group_names
+
+  def _grasp_setup(self):
+    grasp = Grasp()
+
+    # Grasp pose setup
+    grasp.grasp_pose.header.frame_id = "world"
+
+    quat_rot = quaternion_from_euler(-pi / 2, -pi / 4, -pi / 2)
+    quat_msg = geometry_msgs.msg.Quaternion(
+        quat_rot[0],
+        quat_rot[1],
+        quat_rot[2],
+        quat_rot[3]
+    )
+
+    grasp.grasp_pose.pose.orientation = quat_msg
+
+    grasp.grasp_pose.pose.position.x = 0.0
+    grasp.grasp_pose.pose.position.y = 0.0
+    grasp.grasp_pose.pose.position.z = 0.0
+
+    # Pre-grasp approach
+    grasp.pre_grasp_approach.direction.header.frame_id = "world"
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
@@ -168,25 +193,7 @@ class Planner():
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
-        grasp = Grasp()
-
-        grasp.grasp_pose.header.frame_id = "xarm_gripper_base_link"
-
-        quat_rot = quaternion_from_euler(-pi / 2, -pi / 4, -pi / 2)
-        quat_msg = geometry_msgs.msg.Quaternion(
-            quat_rot[0],
-            quat_rot[1],
-            quat_rot[2],
-            quat_rot[3]
-        )
-
-        grasp.grasp_pose.pose.orientation = quat_msg
-
-        grasp.grasp_pose.pose.position.x = 0.0
-        grasp.grasp_pose.pose.position.y = 0.0
-        grasp.grasp_pose.pose.position.z = 0.0
-
-        self.xgripper.pick(box_name, grasp)
+        # self.xgripper.pick(box_name, grasp)
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
