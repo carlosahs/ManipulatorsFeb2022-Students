@@ -136,7 +136,7 @@ class Planner():
     print("======Finished pick")
 
   def _open_gripper(self, posture):
-    offset = 0.1
+    offset = 0.01
 
     # Add both finger joints of xarm6 robot
     posture.joint_names.append("left_finger_joint")
