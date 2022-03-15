@@ -11,7 +11,7 @@ from moveit_commander.conversions import pose_to_list
 import geometry_msgs.msg
 from path_planner.srv import *
 from tf.transformations import *
-from moveit_msgs.msg import Grasp
+# from moveit_msgs.msg import Grasp
 from math import pi
 
 OPERATIONAL_HEIGHT = 0.2
@@ -160,11 +160,12 @@ class Planner():
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
 
+        self.xgripper.set_named_target("open")
+        self.xgripper.go(wait = True)
+        self.xgripper.stop()
+        self.xgripper.clear_pose_targets()
+
         return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=False)
-        # self.xgripper.set_named_target("open")
-        # self.xgripper.go(wait = True)
-        # self.xgripper.stop()
-        # self.xgripper4clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
