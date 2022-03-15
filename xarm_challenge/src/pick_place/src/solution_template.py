@@ -243,7 +243,6 @@ class Planner():
         attach(1, box_name)
 
         # self._pick(box_name)
-        self.xgripper.pick(box_name, grasp)
         self.xgripper.set_named_target("close")
         self.xgripper.go(wait = True)
         self.xgripper.stop()
