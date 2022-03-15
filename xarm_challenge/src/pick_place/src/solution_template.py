@@ -229,6 +229,15 @@ class myNode():
 
       self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
 
+  def _move_to_deposit(self, deposit):
+      xarm_pose = self._get_xarm_pose()
+      deposit_pose = self._get_goal_pose(deposit)
+
+      base2deposit_pose = np.dot(xarm_pose, deposit_pose)
+      base2deposit_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
+
+      self._move2goal(base2deposit_pose, base2deposit_pose_up)
+
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
 
