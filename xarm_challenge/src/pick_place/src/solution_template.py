@@ -167,6 +167,18 @@ class Planner():
         attach(1, box_name)
 
         grasp = Grasp()
+
+        grasp.grasp_pose.header.frame_id = "xarm_gripper_base_link"
+
+        quat_rot = quaternion_from_euler(-pi / 2, -pi / 4, -pi / 2)
+        quat_msg = geometry_msgs.msg.Quaternion(
+            quat_rot[0],
+            quat_rot[1],
+            quat_rot[2],
+            quat_rot[3]
+        )
+
+        grasp.grasp_pose.pose.orientation = quat_msg
         # self.xgripper.set_named_target("close")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
