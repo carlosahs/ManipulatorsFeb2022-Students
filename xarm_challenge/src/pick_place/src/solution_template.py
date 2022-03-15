@@ -207,7 +207,23 @@ class myNode():
       self.planner.goToPose(goal)
 
   def _move_to_box(self, box):
-      box_origin = get_target_position(self.tf_goal(box))
+      xarm_pose = self._get_xarm_pose()
+      box_pose = self._get_goal_pose(box)
+
+      base2box_pose = np.dot(xarm_pose, box_pose)
+      base2box_pose_up = get_translation_matrix((0, 0, OPERATIONAL_HEIGHT))
+
+      self._move2goal(base2box_pose, base2box_pose_up)
+
+      xarm_pose = self._get_xarm_pose()
+      box_pose = self._get_goal_pose(box)
+
+      self._move2goal(xarm_pose, box_pose)
+
+      xarm_pose = self._get_xarm_pose()
+      base2box_up_pose = np.dot(base2box_pose, base2box_pose_up)
+
+      self._move2goal(inverse_matrix(xarm_pose), box_pose_up)
 
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
@@ -222,7 +238,6 @@ class myNode():
         return getObj(action)
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
-    pass
 
   def tf_goal(self, goal):
     #TO DO:Use tf2 to retrieve the position of the target with respect to the proper reference frame
@@ -230,6 +245,7 @@ class myNode():
     while not rospy.is_shutdown():
       try:
         trans = self.tfBuffer.lookup_transform('link_tcp', goal, rospy.Time())
+        # Does it always return?
         return trans
       except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
         rate.sleep()
@@ -240,16 +256,8 @@ class myNode():
     self.planner = Planner()
     self.planner.addObstacles()
 
-    # Move to green box and then to deposit
-    xarm_pose = self._get_xarm_pose()
-    box_pose = self._get_goal_pose(BOXES[0])
-
-    self._move2goal(xarm_pose, box_pose)
-
-    xarm_pose = self._get_xarm_pose()
-    deposit_pose = self._get_goal_pose(DEPOSITS[0])
-
-    self._move2goal(xarm_pose, deposit_pose)
+    # Move to green box
+    self._move_to_box(BOXES[0])
 
     rospy.signal_shutdown("Task Completed")
 
