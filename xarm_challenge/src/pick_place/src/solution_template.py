@@ -75,6 +75,8 @@ class Planner():
     print("====== Planning frame: %s" % planning_frame)
     eef_link = xarm_group.get_end_effector_link()
     print("====== End effector link is : %s" % eef_link)
+    eef_link = xgripper.get_end_effector_link()
+    print("====== End effector link is : %s" % eef_link)
     group_names = robot.get_group_names()
     print("====== Available Planning Groups: %s" % group_names)
     print("====== Printing robot state")
