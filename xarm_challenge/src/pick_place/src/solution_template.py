@@ -132,7 +132,7 @@ class Planner():
     self._close_gripper(grasp.grasp_posture)
 
     print("======Executing pick")
-    self.xarm_group.pick(box, [grasp])
+    self.xarm_group.pick(box, grasp)
     print("======Finished pick")
 
   def _open_gripper(self, posture):
