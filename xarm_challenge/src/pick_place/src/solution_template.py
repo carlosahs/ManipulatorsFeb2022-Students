@@ -234,7 +234,7 @@ class myNode():
         # Calculus for the movement
         xarm2gbox = np.dot(xarm_pos, box_pos)
         aux_z = xarm2gbox[2][3]
-        xarm2gbox[2][3] = -0.4
+        xarm2gbox[2][3] = -0.2
         self.move2goal(xarm2gbox)
 
         xarm2gbox[2][3] = aux_z
