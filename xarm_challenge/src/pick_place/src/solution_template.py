@@ -227,7 +227,7 @@ class myNode():
       xarm_pose = self._get_xarm_pose()
       base2box_up_pose = np.dot(base2box_pose, base2box_pose_up)
 
-      self._move2goal(inverse_matrix(xarm_pose), box_pose_up)
+      self._move2goal(inverse_matrix(xarm_pose), base2box_up_pose)
 
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
