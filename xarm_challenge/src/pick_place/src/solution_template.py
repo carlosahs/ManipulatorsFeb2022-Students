@@ -141,11 +141,11 @@ class Planner():
     posture.joint_names.append("right_finger_joint")
 
     # Set fingers open
-    posture.points.resize(1)
+    posture.points.append(JointTrajectoryPoint())
 
-    posture.points[0].positions.resize(2)
-    posture.points[0].positions[0] = BOX_LENGHT + offset
-    posture.points[0].positions[1] = BOX_LENGHT + offset
+    posture.points[0].positions.append(BOX_LENGTH + offset)
+    posture.points[0].positions.append(BOX_LENGTH + offset)
+
     posture.points[0].time_from_start = rospy.rostime.Duration(0.5)
 
   def _close_gripper(self, posture):
