@@ -128,8 +128,22 @@ class Planner():
     grasp.post_grasp_approach.min_distance = 0.1
     grasp.post_grasp_approach.desired_distance = 0.25
 
-  def _pick(self):
-      pass
+    self._pick(grasp.pre_grasp_posture)
+
+  def _pick(self, posture):
+    # Add both finger joints of xarm6 robot
+    posture.joint_names.resize(2)
+
+    posture.joint_names[0] = "left_finger_joint"
+    posture.joint_names[1] = "right_finger_joint"
+
+    # Set fingers open
+    posture.points.resize(1)
+
+    posture.points[0].positions.resize(2)
+    posture.points[0].positions[0] = BOX_LENGHT
+    posture.points[0].positions[0] = BOX_LENGHT
+    posture.points[0].time_from_start = rospy.rostime.Duration(0.5)
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
