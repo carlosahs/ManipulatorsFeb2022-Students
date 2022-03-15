@@ -215,7 +215,7 @@ class myNode():
       box_pose = self._get_goal_pose(box)
 
       base2box_pose = np.dot(xarm_pose, box_pose)
-      base2box_pose_up = translation_matrix()
+      base2box_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
 
       self._move2goal(base2box_pose, base2box_pose_up)
 
