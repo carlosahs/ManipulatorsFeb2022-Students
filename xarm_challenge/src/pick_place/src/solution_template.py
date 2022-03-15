@@ -61,7 +61,6 @@ class Planner():
     # Instantiate a MoveGroupCommander object
     xarm_group = moveit_commander.MoveGroupCommander("xarm6")
     xgripper = moveit_commander.MoveGroupCommander("xarm_gripper")
-    xgripper.set_goal_tolerance(BOX_LENGTH)
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
         "/move_group/display_planned_path",
