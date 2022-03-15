@@ -176,13 +176,13 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
-        attach = rospy.ServiceProxy('AttachObject', AttachObject)
-        attach(1, box_name)
-
         self.xgripper.set_named_target("close")
         self.xgripper.go(wait = True)
         self.xgripper.stop()
         self.xgripper.clear_pose_targets()
+
+        attach = rospy.ServiceProxy('AttachObject', AttachObject)
+        attach(1, box_name)
 
         return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=True)
     except rospy.ServiceException as e:
