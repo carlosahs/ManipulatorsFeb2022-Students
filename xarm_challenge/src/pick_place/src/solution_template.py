@@ -14,7 +14,6 @@ from tf.transformations import *
 from moveit_msgs.msg import Grasp
 from math import pi
 
-
 def translation_quaternion_matrix(trans_mat, quat_mat):
     return np.dot(trans_mat, quat_mat)
 
@@ -87,43 +86,33 @@ class Planner():
     **************************
     """ 
     scene = self.scene
-    #Cargo names
-    targets = [
-        "RedBox",
-        "BlueBox",
-        "GreenBox"
-    ]
-    #goal names
-    boxes = [
-        "DepositBoxGreen",
-        "DepositBoxRed",
-        "DepositBoxBlue"
-    ]
+
     targets_state = True
     # Red box
     rbox_pose = geometry_msgs.msg.PoseStamped()
-    rbox_pose.header.frame_id = targets[0]
+    rbox_pose.header.frame_id = BOXES[0]
     rbox_pose.pose.orientation.w = 1.0
     rbox_pose.pose.position.z = 0
-    rbox_name = targets[0]
+    rbox_name = BOXES[0]
     scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
-    targets_state = targets_state and self.wait_for_state_update(targets[0], box_is_known=True)
+    targets_state = targets_state and self.wait_for_state_update(BOXES[0], box_is_known=True)
     # Blue box
     bbox_pose = geometry_msgs.msg.PoseStamped()
-    bbox_pose.header.frame_id = targets[1]
+    bbox_pose.header.frame_id = BOXES[1]
     bbox_pose.pose.orientation.w = 2.0
     bbox_pose.pose.position.z = 0
-    bbox_name = targets[1]
+    bbox_name = BOXES[1]
     scene.add_box(bbox_name, bbox_pose, size=(0.06, 0.06, 0.06))
-    targets_state = targets_state and self.wait_for_state_update(targets[1], box_is_known=True)
+    targets_state = targets_state and self.wait_for_state_update(BOXES[1], box_is_known=True)
     # Green box
     gbox_pose = geometry_msgs.msg.PoseStamped()
-    gbox_pose.header.frame_id = targets[2]
+    gbox_pose.header.frame_id = BOXES[2]
     gbox_pose.pose.orientation.w = 3.0
     gbox_pose.pose.position.z = 0
-    gbox_name = targets[2]
+    gbox_name = BOXES[2]
     scene.add_box(gbox_name, gbox_pose, size=(0.06, 0.06, 0.06))
-    targets_state = targets_state and self.wait_for_state_update(targets[2], box_is_known=True)
+    targets_state = targets_state and self.wait_for_state_update(BOXES[2], box_is_known=True)
+
     return targets_state
 
   def goToPose(self,pose_goal):
@@ -143,7 +132,7 @@ class Planner():
         # self.xgripper.set_named_target("open")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
-        # self.xgripper.clear_pose_targets()
+        # self.xgripper4clear_pose_targets()
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
