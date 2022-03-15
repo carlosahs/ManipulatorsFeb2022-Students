@@ -83,6 +83,9 @@ class Planner():
     self.xarm_group = xarm_group
     self.xgripper = xgripper
     self.display_trajectory_publisher = display_trajectory_publisher
+
+    self.cargo_name = ''
+    self.has_cargo = False
     # self.planning_frame = planning_frame
     # self.eef_link = eef_link
     # self.group_names = group_names
@@ -153,6 +156,9 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
+
+        self.cargo_name = ''
+        self.has_cargo = False
         # self.xgripper.set_named_target("open")
         # self.xgripper.go(wait = True)
         # self.xgripper.stop()
@@ -165,6 +171,9 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
+
+        self.cargo = box_name
+        self.has_cargo = True
 
         grasp = Grasp()
         # self.xgripper.set_named_target("close")
@@ -242,7 +251,11 @@ class myNode():
       base2deposit_pose = np.dot(xarm_pose, deposit_pose)
       base2deposit_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
 
+      # Move above deposit
       self._move2goal(base2deposit_pose, base2deposit_pose_up)
+
+      # Place cargo
+      self.planner.detachBox(self.planner.cargo)
 
   def _get_xarm_pose(self):
       return inverse_matrix(get_target_position(self.tf_goal("link_base")))
