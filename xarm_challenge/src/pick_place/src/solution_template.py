@@ -180,7 +180,12 @@ class myNode():
     rospy.wait_for_service('RequestGoal')
     rospy.wait_for_service('AttachObject')
 
-  def _move2goal(self, transform):
+  def _move2goal(self, goal):
+      xarm_pos = inverse_matrix(get_target_position(self.tf_goal("link_base")))
+      goal_pose = get_target_position(self.tf_goal(goal))
+
+      transform = np.dot(xarm_pos, goal_pose)
+
       trans = translation_from_matrix(transform)
       quat_rot = quaternion_from_matrix(transform)
 
