@@ -201,7 +201,7 @@ class Planner():
     #TO DO: Close the gripper and call the service that releases the box
     try:
         touch_links = self.robot.get_link_names(group=GRASPING_GROUP)
-        self.scene.attach_box(self.eef, box_name, touch_inks=touch_links)
+        self.scene.attach_box(self.eef_link, box_name, touch_inks=touch_links)
 
         self._close_grip()
 
