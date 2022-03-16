@@ -91,13 +91,12 @@ class Planner():
 
   def _close_grip(self):
     xgripper = self.xgripper
-    print(xgripper.get_active_joints())
-    print(xgripper.get_current_joint_values())
+    xgripper_joints_values = xgripper.get_current_joints_values()
 
-    joint_value = 10 # * pi / 180
-    joint_groups = self.robot.get_group_names()
+    close_joint_value = pi / 6
 
-    xgripper.set_joint_value_target("left_finger_joint", pi / 6)
+    for i in range(len(xgripper_joint_values)):
+        xgripper_joint_values[i] = close_joint_value
 
     print(xgripper.get_current_joint_values())
 
