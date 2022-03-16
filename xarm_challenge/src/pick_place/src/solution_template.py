@@ -33,9 +33,6 @@ DEPOSITS = [
     "DepositBoxBlue"
 ]
 
-def translation_quaternion_matrix(trans_mat, quat_mat):
-    return np.dot(trans_mat, quat_mat)
-
 def get_target_position(target):
     trans = translation_matrix((
         target.transform.translation.x,
@@ -50,7 +47,7 @@ def get_target_position(target):
         target.transform.rotation.w
     ))
 
-    return translation_quaternion_matrix(trans, quat_rot)
+    return np.dot(trans, quat_rot)
 
 class Planner():
   def __init__(self):
