@@ -186,6 +186,8 @@ class Planner():
   def detachBox(self,box_name):
     #TO DO: Open the gripper and call the service that releases the box
     try:
+        self._open_grip()
+
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
 
