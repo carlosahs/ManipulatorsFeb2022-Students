@@ -115,15 +115,15 @@ class Planner():
 
     targets_state = True
 
-    # Red box
-    rbox_pose = geometry_msgs.msg.PoseStamped()
-    rbox_pose.header.frame_id = BOXES[0]
-    rbox_pose.pose.orientation.w = 1.0
-    rbox_pose.pose.position.z = 0
-    rbox_name = BOXES[0]
-    scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
-    
-    targets_state = targets_state and self.wait_for_state_update(BOXES[0], box_is_known=True)
+    # # Red box
+    # rbox_pose = geometry_msgs.msg.PoseStamped()
+    # rbox_pose.header.frame_id = BOXES[0]
+    # rbox_pose.pose.orientation.w = 1.0
+    # rbox_pose.pose.position.z = 0
+    # rbox_name = BOXES[0]
+    # scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
+    # 
+    # targets_state = targets_state and self.wait_for_state_update(BOXES[0], box_is_known=True)
 
     # Blue box
     bbox_pose = geometry_msgs.msg.PoseStamped()
