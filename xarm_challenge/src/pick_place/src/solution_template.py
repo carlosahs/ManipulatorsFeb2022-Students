@@ -336,12 +336,12 @@ class myNode():
 
         if pick.status == True and pick.goal != "End":
             # Get the box
-            self._move2box(pick.goal)
+            self._move_to_box(pick.goal)
             place = self.getGoal("place")
 
             if (place.status == True and place.goal != "End") or place != None:
                 # Go to deposit
-                self._move2deposit(place.goal)
+                self._move_to_deposit(place.goal)
             else:
                 break
         else:
