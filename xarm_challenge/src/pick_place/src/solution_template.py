@@ -98,6 +98,9 @@ class Planner():
     for i in range(len(xgripper_joint_values)):
         xgripper_joint_values[i] = close_joint_value
 
+    xgripper.move(xgripper_joint_values, wait=True)
+    xgripper.stop()
+
     print(xgripper.get_current_joint_values())
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
