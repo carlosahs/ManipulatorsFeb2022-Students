@@ -251,14 +251,14 @@ class myNode():
       xarm_pose = self._get_xarm_pose()
       base2box_up_pose = np.dot(base2box_pose, base2box_pose_up)
 
-      # # Pick box
-      # self.planner.attachBox(box)
+      # Pick box
+      self.planner.attachBox(box)
 
-      # self.box_name = box
-      # self.box_is_picked = True
+      self.box_name = box
+      self.box_is_picked = True
 
-      # # Move up with box
-      # self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
+      # Move up with box
+      self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
 
   def _move_to_deposit(self, deposit):
       xarm_pose = self._get_xarm_pose()
