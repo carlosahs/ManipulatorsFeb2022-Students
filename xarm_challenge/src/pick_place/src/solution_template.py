@@ -98,7 +98,7 @@ class Planner():
     for i in range(len(xgripper_joint_values)):
         xgripper_joint_values[i] = close_joint_value
 
-    xgripper.move(xgripper_joint_values, wait=True)
+    xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
 
     print(xgripper.get_current_joint_values())
