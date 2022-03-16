@@ -101,8 +101,6 @@ class Planner():
     xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
 
-    print(xgripper.get_current_joint_values())
-
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
     scene = self.scene
@@ -239,34 +237,34 @@ class myNode():
       self.planner.goToPose(goal)
 
   def _move_to_box(self, box):
-      # xarm_pose = self._get_xarm_pose()
-      # box_pose = self._get_goal_pose(box)
+      xarm_pose = self._get_xarm_pose()
+      box_pose = self._get_goal_pose(box)
 
-      # base2box_pose = np.dot(xarm_pose, box_pose)
-      # base2box_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
+      base2box_pose = np.dot(xarm_pose, box_pose)
+      base2box_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
 
-      # # Move above box
-      # self._move2goal(base2box_pose, base2box_pose_up)
+      # Move above box
+      self._move2goal(base2box_pose, base2box_pose_up)
 
-      # xarm_pose = self._get_xarm_pose()
-      # box_pose = self._get_goal_pose(box)
+      xarm_pose = self._get_xarm_pose()
+      box_pose = self._get_goal_pose(box)
 
       self.planner._close_grip()
 
-      # # Move down to box
-      # self._move2goal(xarm_pose, box_pose)
+      # Move down to box
+      self._move2goal(xarm_pose, box_pose)
 
-      # xarm_pose = self._get_xarm_pose()
-      # base2box_up_pose = np.dot(base2box_pose, base2box_pose_up)
+      xarm_pose = self._get_xarm_pose()
+      base2box_up_pose = np.dot(base2box_pose, base2box_pose_up)
 
-      # # Pick box
-      # self.planner.attachBox(box)
+      # Pick box
+      self.planner.attachBox(box)
 
-      # self.box_name = box
-      # self.box_is_picked = True
+      self.box_name = box
+      self.box_is_picked = True
 
-      # # Move up with box
-      # self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
+      # Move up with box
+      self._move2goal(xarm_pose, np.dot(inverse_matrix(xarm_pose), base2box_up_pose))
 
   def _move_to_deposit(self, deposit):
       xarm_pose = self._get_xarm_pose()
