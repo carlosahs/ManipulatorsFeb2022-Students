@@ -177,13 +177,16 @@ class Planner():
     #TO DO: Close the gripper and call the service that releases the box
     try:
         xgripper = self.xgripper
+        print(xgripper.get_joints())
         print(xgripper.get_current_joint_values())
 
-        # joint_value = 10 # * pi / 180
-        # joint_groups = self.robot.get_group_names()
+        joint_value = 10 # * pi / 180
+        joint_groups = self.robot.get_group_names()
 
-        # for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
-        #     xgripper.set_joint_value_target(joint_groups[i], joint_value)
+        for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
+            xgripper.set_joint_value_target(joint_groups[i], joint_value)
+
+        print(xgripper.get_current_joint_values())
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
