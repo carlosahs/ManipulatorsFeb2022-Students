@@ -89,7 +89,7 @@ class Planner():
     self.xgripper = xgripper
     self.display_trajectory_publisher = display_trajectory_publisher
     # self.planning_frame = planning_frame
-    # self.eef_link = eef_link
+    self.eef_link = eef_link
     # self.group_names = group_names
 
   def _close_grip(self):
@@ -200,7 +200,9 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
-        scene = self.scene
+        touch_links = self.robot.get_link_names(group=GRASPING_GROUP)
+        self.scene.attach_box(self.eef, box_name, touch_inks=touch_links)
+
         self._close_grip()
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
