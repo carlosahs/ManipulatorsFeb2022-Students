@@ -18,6 +18,9 @@ OPERATIONAL_HEIGHT = 0.2
 BOX_LENGTH = 0.06
 XGRIPPER_JOINTS_FROM = 6
 
+ARM_GROUP = "xarm6"
+GRASPING_GROUP = "xarm_gripper"
+
 BOXES = [
     "GreenBox",
     "RedBox",
@@ -59,8 +62,8 @@ class Planner():
     # Instantiate a PlanningSceneInterface object
     scene = moveit_commander.PlanningSceneInterface()
     # Instantiate a MoveGroupCommander object
-    xarm_group = moveit_commander.MoveGroupCommander("xarm6")
-    xgripper = moveit_commander.MoveGroupCommander("xarm_gripper")
+    xarm_group = moveit_commander.MoveGroupCommander(ARM_GROUP)
+    xgripper = moveit_commander.MoveGroupCommander(GRASPING_GROUP)
     # Create DisplayTrajectory ROS publisher
     display_trajectory_publisher = rospy.Publisher(
         "/move_group/display_planned_path",
@@ -197,6 +200,7 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
+        scene = self.scene
         self._close_grip()
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
