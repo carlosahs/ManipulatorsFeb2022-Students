@@ -178,7 +178,7 @@ class Planner():
     try:
         xgripper = self.xgripper
 
-        joint_value = 10 * pi / 180
+        joint_value = 10 # * pi / 180
         joint_groups = self.robot.get_group_names()
 
         for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
