@@ -247,6 +247,12 @@ class myNode():
       goal.position.y = trans[1]
       goal.position.z = trans[2]
 
+      xyz_angles = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
+      xyz_angles[2] = euler_from_quaternion(quat_rot)[2]
+
+      print(quat_rot)
+      print(quaternion_from_euler(xyz_angles[0], xyz_angles[1], xyz_angles[2]))
+
       # Orientations
       goal.orientation.x = 1.0
       goal.orientation.y = 0.0
