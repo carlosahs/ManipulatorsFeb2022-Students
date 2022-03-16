@@ -237,17 +237,17 @@ class myNode():
       self.planner.goToPose(goal)
 
   def _move_to_box(self, box):
-      xarm_pose = self._get_xarm_pose()
-      box_pose = self._get_goal_pose(box)
+      # xarm_pose = self._get_xarm_pose()
+      # box_pose = self._get_goal_pose(box)
 
-      base2box_pose = np.dot(xarm_pose, box_pose)
-      base2box_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
+      # base2box_pose = np.dot(xarm_pose, box_pose)
+      # base2box_pose_up = translation_matrix((0, 0, OPERATIONAL_HEIGHT))
 
-      # Move above box
-      self._move2goal(base2box_pose, base2box_pose_up)
+      # # Move above box
+      # self._move2goal(base2box_pose, base2box_pose_up)
 
-      xarm_pose = self._get_xarm_pose()
-      box_pose = self._get_goal_pose(box)
+      # xarm_pose = self._get_xarm_pose()
+      # box_pose = self._get_goal_pose(box)
 
       self.planner._close_grip()
 
