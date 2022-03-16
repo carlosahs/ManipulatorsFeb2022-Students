@@ -116,6 +116,11 @@ class Planner():
     xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
 
+  def _remove_obstacle(self, box):
+      self.scene.remove_world_object(box)
+
+      return self.wait_for_state_update(box, box_is_known=False, box_is_attached=False)
+
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
     scene = self.scene
