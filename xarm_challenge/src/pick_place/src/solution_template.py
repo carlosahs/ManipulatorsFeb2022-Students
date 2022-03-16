@@ -247,17 +247,16 @@ class myNode():
       goal.position.y = trans[1]
       goal.position.z = trans[2]
 
-      xyz_angles = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
-      xyz_angles[2] = euler_from_quaternion(quat_rot)[2]
+      xyz_rpy = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
+      xyz_rpy[2] = euler_from_quaternion(quat_rot)[2]
 
-      print(quat_rot)
-      print(quaternion_from_euler(xyz_angles[0], xyz_angles[1], xyz_angles[2]))
+      xyz_quat = quaternion_from_euler(xyz_rpy[0], xyz_rpy[1], xyz_rpy[2])
 
       # Orientations
-      goal.orientation.x = 1.0
-      goal.orientation.y = 0.0
-      goal.orientation.z = 0.0
-      goal.orientation.w = 0.0
+      goal.orientation.x = xyz_quat[0]
+      goal.orientation.y = xyz_quat[1]
+      goal.orientation.z = xyz_quat[2]
+      goal.orientation.w = xyz_quat[3]
 
       self.planner.goToPose(goal)
 
