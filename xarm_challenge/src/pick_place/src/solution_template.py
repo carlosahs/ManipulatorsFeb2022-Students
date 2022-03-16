@@ -67,7 +67,7 @@ class Planner():
         moveit_msgs.msg.DisplayTrajectory,
         queue_size=20
     )
-    """
+
     # Display basic information
     planning_frame = xarm_group.get_planning_frame()
     print("====== Planning frame: %s" % planning_frame)
@@ -78,7 +78,7 @@ class Planner():
     print("====== Printing robot state")
     print(robot.get_current_state())
     print('')
-    """
+
     # Instantiate class variables
     self.robot = robot
     self.scene = scene
@@ -176,6 +176,9 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
+        # xgripper = self.xgripper
+
+        # xgripper.set_joint_value_target(15 * pi / 180)
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
