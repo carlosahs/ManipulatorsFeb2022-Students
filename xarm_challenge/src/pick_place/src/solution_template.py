@@ -188,7 +188,7 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
-        self.planner._close_grip()
+        self._close_grip()
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
