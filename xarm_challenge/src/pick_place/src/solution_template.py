@@ -101,6 +101,18 @@ class Planner():
     xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
 
+  def _open_grip(self):
+    xgripper = self.xgripper
+    xgripper_joint_values = xgripper.get_current_joint_values()
+
+    open_joint_value = 0.0
+
+    for i in range(len(xgripper_joint_values)):
+        xgripper_joint_values[i] = open_joint_value
+
+    xgripper.go(xgripper_joint_values, wait=True)
+    xgripper.stop()
+
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
     scene = self.scene
