@@ -89,6 +89,19 @@ class Planner():
     # self.eef_link = eef_link
     # self.group_names = group_names
 
+  def _close_grip(self):
+    xgripper = self.xgripper
+    print(xgripper.get_joints())
+    print(xgripper.get_current_joint_values())
+
+    joint_value = 10 # * pi / 180
+    joint_groups = self.robot.get_group_names()
+
+    for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
+        xgripper.set_joint_value_target(joint_groups[i], joint_value)
+
+    print(xgripper.get_current_joint_values())
+
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
     scene = self.scene
@@ -176,18 +189,6 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
-        xgripper = self.xgripper
-        print(xgripper.get_joints())
-        print(xgripper.get_current_joint_values())
-
-        joint_value = 10 # * pi / 180
-        joint_groups = self.robot.get_group_names()
-
-        for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
-            xgripper.set_joint_value_target(joint_groups[i], joint_value)
-
-        print(xgripper.get_current_joint_values())
-
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
@@ -248,6 +249,8 @@ class myNode():
 
       xarm_pose = self._get_xarm_pose()
       box_pose = self._get_goal_pose(box)
+
+      self.planner._close_grip()
 
       # # Move down to box
       # self._move2goal(xarm_pose, box_pose)
