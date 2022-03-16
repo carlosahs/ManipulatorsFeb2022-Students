@@ -96,7 +96,7 @@ class Planner():
     xgripper = self.xgripper
     xgripper_joint_values = xgripper.get_current_joint_values()
 
-    close_joint_value = pi / 13
+    close_joint_value = pi / 11
 
     for i in range(len(xgripper_joint_values)):
         xgripper_joint_values[i] = close_joint_value
