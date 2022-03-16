@@ -189,7 +189,7 @@ class Planner():
         self._open_grip()
 
         self.scene.remove_attached_object(self.eef_link, name=box_name)
-        self.scene.remove_world_object(box)
+        self.scene.remove_world_object(box_name)
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
