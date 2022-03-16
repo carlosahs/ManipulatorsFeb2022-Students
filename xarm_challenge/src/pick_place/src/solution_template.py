@@ -188,6 +188,8 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
+        self.planner._close_grip()
+
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
@@ -248,8 +250,6 @@ class myNode():
 
       xarm_pose = self._get_xarm_pose()
       box_pose = self._get_goal_pose(box)
-
-      self.planner._close_grip()
 
       # Move down to box
       self._move2goal(xarm_pose, box_pose)
