@@ -145,7 +145,7 @@ class Planner():
     rbox_pose.pose.orientation.w = 1.0
     rbox_pose.pose.position.z = 0
     rbox_name = BOXES[0]
-    scene.add_box(rbox_name, rbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(rbox_name, rbox_pose, size=(BOX_LENGTH, BOX_LENGTH, BOX_LENGTH))
     
     targets_state = targets_state and self.wait_for_state_update(BOXES[0], box_is_known=True)
 
@@ -155,7 +155,7 @@ class Planner():
     bbox_pose.pose.orientation.w = 2.0
     bbox_pose.pose.position.z = 0
     bbox_name = BOXES[1]
-    scene.add_box(bbox_name, bbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(bbox_name, bbox_pose, size=(BOX_LENGTH, BOX_LENGTH, BOX_LENGTH))
 
     targets_state = targets_state and self.wait_for_state_update(BOXES[1], box_is_known=True)
 
@@ -165,7 +165,7 @@ class Planner():
     gbox_pose.pose.orientation.w = 3.0
     gbox_pose.pose.position.z = 0
     gbox_name = BOXES[2]
-    scene.add_box(gbox_name, gbox_pose, size=(0.06, 0.06, 0.06))
+    scene.add_box(gbox_name, gbox_pose, size=(BOX_LENGTH, BOX_LENGTH, BOX_LENGTH))
 
     targets_state = targets_state and self.wait_for_state_update(BOXES[2], box_is_known=True)
 
