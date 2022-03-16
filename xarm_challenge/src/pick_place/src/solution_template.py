@@ -15,8 +15,8 @@ from tf.transformations import *
 from math import pi
 
 OPERATIONAL_HEIGHT = 0.2
-
 BOX_LENGTH = 0.06
+XGRIPPER_JOINTS_FROM = 6
 
 BOXES = [
     "GreenBox",
@@ -176,9 +176,14 @@ class Planner():
   def attachBox(self,box_name):
     #TO DO: Close the gripper and call the service that releases the box
     try:
-        # xgripper = self.xgripper
+        xgripper = self.xgripper
 
-        # xgripper.set_joint_value_target(15 * pi / 180)
+        joint_value = 10 * pi / 180
+        joint_groups = self.robot.get_group_names()
+
+        for i in range(XGRIPPER_JOINTS_FROM, len(joint_groups)):
+            xgripper.set_joint_value_target(joint_groups[i], joint_value)
+
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(1, box_name)
 
