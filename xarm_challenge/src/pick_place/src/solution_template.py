@@ -100,6 +100,7 @@ class Planner():
 
     xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
+    xgripper.clear_pose_targets()
 
   def _open_grip(self):
     xgripper = self.xgripper
@@ -112,6 +113,8 @@ class Planner():
 
     xgripper.go(xgripper_joint_values, wait=True)
     xgripper.stop()
+    xgripper.clear_pose_targets()
+
 
   def wait_for_state_update(self,box_name, box_is_known=False, box_is_attached=False, timeout=0.5):
     #TO DO: Whenever we change something in moveit we need to make sure that the interface has been updated properly
@@ -185,11 +188,6 @@ class Planner():
     try:
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
         attach(0, box_name)
-
-        self.xgripper.set_named_target("open")
-        self.xgripper.go(wait = True)
-        self.xgripper.stop()
-        self.xgripper.clear_pose_targets()
 
         return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=False)
     except rospy.ServiceException as e:
