@@ -91,7 +91,7 @@ class Planner():
 
   def _close_grip(self):
     xgripper = self.xgripper
-    xgripper_joints_values = xgripper.get_current_joints_values()
+    xgripper_joints_values = xgripper.get_current_joint_values()
 
     close_joint_value = pi / 6
 
