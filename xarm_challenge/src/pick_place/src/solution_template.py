@@ -14,6 +14,7 @@ from tf.transformations import *
 # from moveit_msgs.msg import Grasp
 from math import pi
 
+AXES = 3
 OPERATIONAL_HEIGHT = 0.125
 BOX_LENGTH = 0.06
 GRIPPER_CLOSURE_VALUE = (pi / 11 + pi / 12) / 2
@@ -34,6 +35,7 @@ DEPOSITS = [
 ]
 
 BOX_ORIGIN_ORIENTATION = quaternion_from_euler(0.0, 0.0, 0.0)
+PARALLEL_UNIT_VECTOR = np.array([0.0, 0.0, 1.0, 0.0])
 
 def get_target_position(target):
     trans = translation_matrix((
@@ -50,6 +52,11 @@ def get_target_position(target):
     ))
 
     return np.dot(trans, quat_rot)
+
+def square_error_from_parallel(vector):
+    square_error = (PARALLEL_UNIT_VECTOR - vector) ** 2
+
+    return square_error
 
 class Planner():
   def __init__(self):
@@ -247,8 +254,27 @@ class myNode():
       goal.position.y = trans[1]
       goal.position.z = trans[2]
 
+      # Get goal axis parallel to gripper z-axis
+      goal_orientation = quaternion_matrix(quat_rot)
+      parallel_axis = AXES - 1
+      square_error = square_error_from_parallel(goal_orientation[:, parallel_axis])
+
+      while not np.allclose(np.zeros(AXES + 1), square_error, rtol=1e-04, atol=1e-05):
+          parallel_axis -= 1
+
+          if parallel_axis < 0:
+              print("No parallel axis found.")
+              print("======Defaulting to z-axis.")
+
+              parallel_axis = AXES - 1
+
+              break
+
+          square_error = square_error_from_parallel(goal_orientation[:, parallel_axis])
+
+      # Rotate gripper z-axis around goal
       xyz_rpy = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
-      xyz_rpy[2] = euler_from_quaternion(quat_rot)[2]
+      xyz_rpy[AXES-1] = euler_from_quaternion(quat_rot)[parallel_axis]
 
       xyz_quat = quaternion_from_euler(xyz_rpy[0], xyz_rpy[1], xyz_rpy[2])
 
