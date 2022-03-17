@@ -260,28 +260,26 @@ class myNode():
       # Get goal axis parallel to gripper z-axis
       goal_orientation = quaternion_matrix(quat_rot)
       parallel_axis = AXES - 1
+      axes = "sxyz"
 
       while (not vectors_are_close(PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])) and
         (not vectors_are_close(-PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])):
           parallel_axis -= 1
 
-          if parallel_axis < 0:
+          if parallel_axis == 1:
+              # y-axis is parallel
+              axes = "sxzy"
+          elif parallel_axis == 0:
+              # x-axis is parallel
+              axes = "syzx"
+          elif parallel_axis < 0:
               print("No parallel axis found.")
               print("======Defaulting to z-axis.")
 
               parallel_axis = AXES - 1
+              axes = "sxyz"
 
               break
-
-      # Rotate gripper z-axis around goal
-      axes = "sxyz"
-
-      if parallel_axis == 0:
-          axes = "syzx"
-      elif parallel_axis == 1:
-          axes = "sxzy"
-      else:
-          axes = "sxyz"
 
       xyz_rpy = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
       xyz_rpy[AXES - 1] = euler_from_quaternion(quat_rot, axes)[AXES - 1]
