@@ -33,6 +33,8 @@ DEPOSITS = [
     "DepositBoxBlue"
 ]
 
+BOX_ORIGIN_ROTATION = quaternion_from_euler(0.0, 0.0, 0.0)
+
 def get_target_position(target):
     trans = translation_matrix((
         target.transform.translation.x,
