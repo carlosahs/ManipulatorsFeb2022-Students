@@ -14,7 +14,7 @@ from tf.transformations import *
 # from moveit_msgs.msg import Grasp
 from math import pi
 
-OPERATIONAL_HEIGHT = 0.2
+OPERATIONAL_HEIGHT = 0.125
 BOX_LENGTH = 0.06
 XGRIPPER_JOINTS_FROM = 6
 
