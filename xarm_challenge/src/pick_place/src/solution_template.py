@@ -189,7 +189,7 @@ class Planner():
         self.scene.remove_world_object(box_name)
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
-        attach(0, box_name)
+        attach(False, box_name)
 
         return self.wait_for_state_update(box_name, box_is_known=False, box_is_attached=False)
     except rospy.ServiceException as e:
@@ -206,7 +206,7 @@ class Planner():
         self._close_grip()
 
         attach = rospy.ServiceProxy('AttachObject', AttachObject)
-        attach(1, box_name)
+        attach(True, box_name)
 
         return self.wait_for_state_update(box_name, box_is_known=True, box_is_attached=True)
     except rospy.ServiceException as e:
