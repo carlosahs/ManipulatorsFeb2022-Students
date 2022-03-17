@@ -335,22 +335,22 @@ class myNode():
     self.planner = Planner()
     self.planner.addObstacles()
 
-    # Move according to RequestGoal service
-    while True:
-        pick = self.getGoal("pick")
+    # # Move according to RequestGoal service
+    # while True:
+    #     pick = self.getGoal("pick")
 
-        if pick.status == True and pick.goal != "End":
-            # Get the box
-            self._move_to_box(pick.goal)
-            place = self.getGoal("place")
+    #     if pick.status == True and pick.goal != "End":
+    #         # Get the box
+    #         self._move_to_box(pick.goal)
+    #         place = self.getGoal("place")
 
-            if (place.status == True and place.goal != "End") or place != None:
-                # Go to deposit
-                self._move_to_deposit(place.goal)
-            else:
-                break
-        else:
-            break
+    #         if (place.status == True and place.goal != "End") or place != None:
+    #             # Go to deposit
+    #             self._move_to_deposit(place.goal)
+    #         else:
+    #             break
+    #     else:
+    #         break
 
     rospy.signal_shutdown("Task Completed")
 
