@@ -248,7 +248,7 @@ class myNode():
       goal.position.z = trans[2]
 
       xyz_rpy = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
-      xyz_rpy[2] = -euler_from_quaternion(quat_rot)[2]
+      xyz_rpy[2] = euler_from_quaternion(quat_rot)[2]
 
       xyz_quat = quaternion_from_euler(xyz_rpy[0], xyz_rpy[1], xyz_rpy[2])
 
