@@ -262,8 +262,10 @@ class myNode():
       parallel_axis = AXES - 1
       axes = "sxyz"
 
-      while (not vectors_are_close(PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])) and
-        (not vectors_are_close(-PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])):
+      while (
+        (not vectors_are_close(PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])) and
+        (not vectors_are_close(-PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis]))
+      ):
           parallel_axis -= 1
 
           if parallel_axis == 1:
