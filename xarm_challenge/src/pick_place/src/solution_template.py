@@ -16,6 +16,7 @@ from math import pi
 
 OPERATIONAL_HEIGHT = 0.125
 BOX_LENGTH = 0.06
+GRIPPER_CLOSURE_VALUE = (pi / 11 + pi / 12) / 2
 
 ARM_GROUP = "xarm6"
 GRASPING_GROUP = "xarm_gripper"
@@ -92,7 +93,7 @@ class Planner():
     xgripper = self.xgripper
     xgripper_joint_values = xgripper.get_current_joint_values()
 
-    close_joint_value = (pi / 11 + pi / 12) / 2
+    close_joint_value = GRIPPER_CLOSURE_VALUE
 
     for i in range(len(xgripper_joint_values)):
         xgripper_joint_values[i] = close_joint_value
