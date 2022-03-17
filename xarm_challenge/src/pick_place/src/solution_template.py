@@ -273,8 +273,17 @@ class myNode():
           square_error = square_error_from_parallel(goal_orientation[:, parallel_axis])
 
       # Rotate gripper z-axis around goal
+      axes = "sxyz"
+
+      if parallel_axis == 0:
+          axes = "syzx"
+      elif parallel_axis == 1:
+          axes = "sxzy"
+      else:
+          axes = "sxyz"
+
       xyz_rpy = list(euler_from_quaternion([1.0, 0.0, 0.0, 0.0]))
-      xyz_rpy[AXES-1] = euler_from_quaternion(quat_rot)[parallel_axis]
+      xyz_rpy[AXES - 1] = euler_from_quaternion(quat_rot, axes)[AXES - 1]
 
       xyz_quat = quaternion_from_euler(xyz_rpy[0], xyz_rpy[1], xyz_rpy[2])
 
