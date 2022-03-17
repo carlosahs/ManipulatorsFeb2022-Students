@@ -53,10 +53,13 @@ def get_target_position(target):
 
     return np.dot(trans, quat_rot)
 
-def square_error_from_parallel(vector):
-    square_error = (PARALLEL_UNIT_VECTOR - vector) ** 2
-
-    return square_error
+def vectors_are_close(a, b):
+    return np.allclose(
+        np.zeros(AXES + 1),
+        (a - b) ** 2,
+        rtol = 1e-04,
+        atol = 1e-05
+    )
 
 class Planner():
   def __init__(self):
@@ -257,9 +260,9 @@ class myNode():
       # Get goal axis parallel to gripper z-axis
       goal_orientation = quaternion_matrix(quat_rot)
       parallel_axis = AXES - 1
-      square_error = square_error_from_parallel(goal_orientation[:, parallel_axis])
 
-      while not np.allclose(np.zeros(AXES + 1), square_error, rtol=1e-04, atol=1e-05):
+      while (not vectors_are_close(PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])) and
+        (not vectors_are_close(-PARALLEL_UNIT_VECTOR, goal_orientation[:, parallel_axis])):
           parallel_axis -= 1
 
           if parallel_axis < 0:
@@ -269,8 +272,6 @@ class myNode():
               parallel_axis = AXES - 1
 
               break
-
-          square_error = square_error_from_parallel(goal_orientation[:, parallel_axis])
 
       # Rotate gripper z-axis around goal
       axes = "sxyz"
