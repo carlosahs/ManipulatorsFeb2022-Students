@@ -16,7 +16,6 @@ from math import pi
 
 OPERATIONAL_HEIGHT = 0.125
 BOX_LENGTH = 0.06
-XGRIPPER_JOINTS_FROM = 6
 
 ARM_GROUP = "xarm6"
 GRASPING_GROUP = "xarm_gripper"
