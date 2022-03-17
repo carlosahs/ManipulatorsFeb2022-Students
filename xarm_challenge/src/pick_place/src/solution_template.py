@@ -335,6 +335,9 @@ class myNode():
     self.planner = Planner()
     self.planner.addObstacles()
 
+    self._move_to_box(BOXES[1])
+    self._move_to_deposit(DEPOSITS[1])
+
     # # Move according to RequestGoal service
     # while True:
     #     pick = self.getGoal("pick")
