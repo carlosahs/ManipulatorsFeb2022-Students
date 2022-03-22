@@ -1,3 +1,6 @@
+# Pick and place demo
+https://www.youtube.com/watch?v=MJmLCSnBkec
+
 # Manchester notes on challenge
 
 This workspace contains a bunch of packages related with the usage of a xarm manipulator arm (either the model 5,6,7). 
